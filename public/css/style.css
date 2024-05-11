@@ -1,0 +1,109 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.chat-container {
+  display: flex;
+  flex-flow: column;
+  align-content: flex-end;
+  height: auto;
+  overflow-y: scroll;
+  padding: 10px;
+  margin-bottom: 56px;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#resetBtn {
+  background-color: #dc3545;
+  margin-right:20px;
+}
+
+#resetBtn:hover {
+  background-color: #e4606d;
+}
+
+button:disabled {
+  color: #aaa; /* Gray out the text */
+  background-color: #ddd; /* Lighter background */
+  cursor: not-allowed; /* Shows a prohibited sign as cursor */
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 0 1rem;
+  border-radius: 5px;
+  max-width: 70%;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+}
+
+.assistant {
+  align-self: flex-start;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* New styles for in-flight indicator */
+.in-flight-indicator {
+  /* ?? */
+}
+
+.message.in-flight .in-flight-indicator {
+  display: inline-block;
+  font-size: 12px;
+  color: #007bff;
+}
+
+#loading-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ivory;
+  background-color: rgba(40, 167, 69, 0.8);
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}

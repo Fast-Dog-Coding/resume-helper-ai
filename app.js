@@ -17,9 +17,7 @@ validateEnvVariables();
 (async () => {
   try {
     await mongoose.connect(process.env.MONGODB_CONNECTION, {
-      dbName: process.env.MONGODB_DB_NAME,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      dbName: process.env.MONGODB_DB_NAME
     });
     logger.info('MongoDB Connected!');
 

@@ -1,0 +1,12 @@
+/*
+ * TO DOs
+ *
+ * - [Database integration to hold logs: MongoDB Atlas.]
+ * - - FIX storing thread contents.
+ * - expire threads.
+ * - AI Files:
+ * - - Add a list of courses taken with dates completed, and content descriptions.
+ * - Clean up code
+ * - - Error handling
+ * - - Comments
+ */

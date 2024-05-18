@@ -2,13 +2,13 @@ const chatContainer = document.getElementById('chatContainer');
 const questionInput = document.getElementById('questionInput');
 const submitBtn = document.getElementById('submitBtn');
 const resetBtn = document.getElementById('resetBtn');
+const loadingMessage = document.getElementById('loading-message');
 
 questionInput.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
     submitQuestion();
   }
 });
-
 submitBtn.addEventListener('click', submitQuestion);
 resetBtn.addEventListener('click', () => {
   // expire the threadId cookie to start a new thread.
@@ -49,7 +49,6 @@ function startProgressMessage() {
     'Almost there...'
   ];
   let index = 0;
-  const loadingMessage = document.getElementById('loading-message');
   loadingMessage.textContent = messages[index];
   loadingMessage.hidden = false;
 
@@ -61,7 +60,7 @@ function startProgressMessage() {
 
 function stopProgressMessage(intervalId) {
   clearInterval(intervalId);
-  document.getElementById('loading-message').hidden = true;
+  loadingMessage.hidden = true;
 }
 
 function submitQuestion() {
@@ -104,17 +103,10 @@ function setMessages(messages) {
   );
 }
 
-function addMessage(message, sender, inFlight = false) {
+function addMessage(message, sender) {
   const messageElement = document.createElement('div');
   messageElement.classList.add('message', sender);
-
-  if (inFlight) {
-    messageElement.classList.add('in-flight');
-    messageElement.innerHTML = `${marked.parse(message)}<span class="in-flight-indicator">...</span>`;
-
-  } else {
-    messageElement.innerHTML = marked.parse(message); // convert MD to HTML
-  }
+  messageElement.innerHTML = marked.parse(message); // convert MD to HTML
 
   chatContainer.appendChild(messageElement);
   chatContainer.scrollTop = chatContainer.scrollHeight;

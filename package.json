@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "push-patch": "npm version patch && git push",
+    "push-minor": "npm version minor && git push",
+    "push-major": "npm version major && git push"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -11,12 +14,14 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
     "http-errors": "~1.6.3",
     "mongodb": "^6.6.0",
     "mongoose": "^8.3.3",
     "morgan": "~1.9.1",
     "openai": "^4.40.2",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21"

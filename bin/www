@@ -52,19 +52,17 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      logger.error(bind + ' requires elevated privileges');
+      logger.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
 
     case 'EADDRINUSE':
-      logger.error(bind + ' is already in use');
+      logger.error(`${bind} is already in use`);
       process.exit(1);
       break;
 
@@ -78,8 +76,27 @@ function onError(error) {
  */
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  logger.info('Listening on ' + bind);
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  logger.info(`Listening on ${bind}`);
+}
+
+/**
+ * Handle process termination and exit gracefully.
+ */
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+function gracefulShutdown() {
+  logger.info('Shutting down gracefully...');
+
+  server.close(() => {
+    logger.info('Closed out remaining connections.');
+    process.exit(0);
+  });
+
+  // Force close server after 10secs
+  setTimeout(() => {
+    logger.error('Could not close connections in time, forcefully shutting down');
+    process.exit(1);
+  }, 10000);
 }

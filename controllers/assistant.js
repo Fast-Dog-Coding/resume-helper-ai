@@ -2,21 +2,7 @@ const openai = require('../config/openai');
 const logger = require('../config/logger');
 const Thread = require('../models/thread');
 const Run = require('../models/run');
-const { OPEN_AI_ASSISTANT_ID, OPEN_AI_MAX_PROMPT_TOKENS } = process.env;
-
-let assistant = null;
-
-async function retrieveAssistant() {
-  if (!assistant) {
-    assistant = await openai.beta.assistants.retrieve(OPEN_AI_ASSISTANT_ID);
-
-    if (!assistant) {
-      throw `Could not find Assistant: ${OPEN_AI_ASSISTANT_ID}`;
-    }
-  }
-
-  return assistant;
-}
+const { OPEN_AI_ASSISTANT_ID } = process.env;
 
 /**
  * Retrieves messages for a thread and returns them in chronological order as an array.
@@ -45,6 +31,11 @@ async function retrieveThreadMessages(threadId) {
   }
 }
 
+/**
+ * Creates a new OpenAI Thread and returns it.
+ *
+ * @return {Promise<Thread|null>}
+ */
 async function createThread() {
   try {
     return await openai.beta.threads.create();
@@ -55,6 +46,15 @@ async function createThread() {
   }
 }
 
+/**
+ * Attempts to retrieve the OpenAI Thread (by its threadId.) If threadId is
+ * undefined, creates a new Thread. Optionally attempts to add the Thread's
+ * Messages to it.
+ *
+ * @param {string|undefined} threadId - The id of the Thread
+ * @param {boolean} [includeMessages=false] - flag to include the Thread's Messages.
+ * @return {Promise<Thread|null>} - The Thread (or null, if there was an error.)
+ */
 async function retrieveThread(threadId, includeMessages = false) {
   let thread;
 
@@ -82,18 +82,13 @@ async function retrieveThread(threadId, includeMessages = false) {
   }
 }
 
-async function deleteThread(threadId) {
-  try {
-    const result = await openai.beta.threads.del(threadId);
+/**
+ * Appends a user Message to the thread (existing or new.)
 
-    return result.deleted;
-
-  } catch (error) {
-    logger.error(`Error deleting Thread: ${threadId}. Error: ${error.message}`);
-    return false;
-  }
-}
-
+ * @param {string} threadId - The id of the Thread
+ * @param {string} content - The text of the message
+ * @return {Promise<string>} - The Thread's id (could be a new Thread
+ */
 async function addThreadMessage(threadId, content) {
   try {
     const thread = await retrieveThread(threadId);
@@ -112,7 +107,7 @@ async function addThreadMessage(threadId, content) {
 }
 
 async function creteRunDoc(run) {
-  const thread = await retrieveThread(run.thread_id);
+  const thread = await retrieveThread(run.thread_id, true);
   logger.info(`Thread: ${thread}`);
 
   const runDoc = {
@@ -124,6 +119,7 @@ async function creteRunDoc(run) {
 }
 
 /**
+ * Runs the Thread with the assistant. Returns the Messages.
  *
  * @param threadId
  * @return {Promise<ChatCompletionSnapshot.Choice.Message[]>}
@@ -141,7 +137,8 @@ async function runThreadPoll(threadId) {
   // TODO: Fix/rethink logging await creteRunDoc(run);
 
   /*
-    queued, in_progress, requires_action, cancelling, cancelled, failed, completed, or expired
+    status values: queued, in_progress, requires_action, cancelling, cancelled,
+                   failed, completed, or expired
   */
   if (run.status === 'completed') {
     return retrieveThreadMessages(run.thread_id);

@@ -48,7 +48,12 @@ app.set('view engine', 'ejs');
 app.use(morgan('combined', { stream: { write: (message) => logger.info(message.trim()) } }));
 
 // Security enhancements
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: [ "'self'" ],
+    scriptSrc: [ "'self'", 'https://cdn.jsdelivr.net/npm/marked/marked.min.js' ]
+  }
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

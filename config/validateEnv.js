@@ -1,6 +1,5 @@
 const logger = require('./logger');
 
-
 /**
  * Validates that all required environment variables are set.
  *

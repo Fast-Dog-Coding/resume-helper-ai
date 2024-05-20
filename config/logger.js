@@ -60,4 +60,6 @@ logger.rejections.handle(
   new winston.transports.File({ filename: 'rejections.log' })
 );
 
+logger.log(logger.level, `Logging set to ${logger.level}`);
+
 module.exports = logger;

@@ -7,6 +7,7 @@ const key = crypto.randomBytes(32); // Generate a random key for encryption
 
 /**
  * Decrypts text encrypted with the encrypt function.
+ *
  * @param {string} text - The encrypted text to decrypt.
  * @returns {string} The decrypted text.
  */
@@ -49,11 +50,11 @@ function getThreadId(req, res, next) {
 
   try {
     if (encryptedId) {
-      logger.info(`encryptedId: ${encryptedId}`);
+      logger.debug(`encryptedId: ${encryptedId}`);
       threadId = decrypt(encryptedId);
     }
 
-    logger.info(`threadId: ${threadId}`);
+    logger.debug(`threadId: ${threadId}`);
     req.threadId = threadId;
 
   } catch (error) {
@@ -75,14 +76,14 @@ function setThreadId(req, res, next) {
   const { threadId } = req;
 
   if (threadId) {
-    logger.info(`req.threadId: ${threadId}`);
+    logger.debug(`req.threadId: ${threadId}`);
 
     try {
       const expirationDate = new Date(Date.now() + 1000 * 60 * 30); // 30 minutes
       const encryptedId = encrypt(threadId);
 
-      logger.info(`encryptedId: ${encryptedId}`);
-      logger.info(`expirationDate: ${(new Date(expirationDate)).toISOString()}`);
+      logger.debug(`encryptedId: ${encryptedId}`);
+      logger.debug(`expirationDate: ${(new Date(expirationDate)).toISOString()}`);
       res.cookie('threadId', encryptedId, { expires: expirationDate }); // Set the encrypted resourceId in a cookie
 
     } catch (error) {

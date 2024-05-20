@@ -7,9 +7,16 @@ const logger = require('../config/logger');
 const INTRODUCTION_MESSAGES = [
   { role: 'assistant', content: 'Welcome to **Grant\'s Resume Assistant** chatbot! You can ask me questions about a Grant Lindsay\'s resume or work experience, and I\'ll do my best to provide relevant information.'},
   { role: 'assistant', content: 'Feel free to start by asking a question. For example:\n\n**What does Grant do for work?** or\n\n**Please summarize Grant\'s skills.**'},
+  { role: 'assistant', content: 'Also, you can list the skills you are in need of and then ask, "Would Grant be a good fit for this position?"'},
   { role: 'assistant', content: '**Please note** that this application uses beta services from OpenAI and can make mistakes, even giving wrong answers. Do not make decisions based on these responses without first confirming they are correct.'}
 ];
 
+/**
+ * Transforms the content of the message for display.
+ *
+ * @param {import('openai').ThreadCreateAndRunParams.Thread.Message} message
+ * @return {{role, content: *}}
+ */
 function formatMessage(message) {
   // remove annotation markers, like: "foo<strong>【10:0†source】</strong>bar"
   const content = message.content[0].text.value.replace(/【[^】]*】/g, "");
@@ -41,6 +48,13 @@ async function addMessage(req, res, next) {
   }
 }
 
+/**
+ * Responds to caller with an array of formatted messages.
+ *
+ * @param {import('express').Request} req - The request object.
+ * @param {import('express').Response} res - The response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
+ */
 async function getThreadMessages(req, res, next) {
   const { threadId } = req;
 
@@ -88,9 +102,7 @@ async function askAssistant(req, res, next) {
 }
 
 /*
- * Handlers
- *
- * path: /api/
+ * Handlers for path: /api/
  */
 
 /**

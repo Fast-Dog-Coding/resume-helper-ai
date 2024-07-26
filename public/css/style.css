@@ -8,12 +8,11 @@ body {
 
 .chat-container {
   display: flex;
-  flex-flow: column;
-  align-content: flex-end;
-  height: auto;
-  overflow-y: scroll;
+  flex-direction: column;
+  flex: 1; /* Allows the chat container to grow and fill available space */
+  overflow-y: auto; /* Makes the chat container scrollable */
   padding: 10px;
-  margin-bottom: 56px;
+  margin-bottom: 56px; /* Ensure it doesn't overlap with the input area */
 }
 
 .input-container {

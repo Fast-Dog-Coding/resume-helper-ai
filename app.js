@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   // Set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') !== 'production' ? err : {};
+  res.locals.error = req.app.get('env') === 'production' ? {} : err;
 
   // Render the error page
   res.status(err.status || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR);

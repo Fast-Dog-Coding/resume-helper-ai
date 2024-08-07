@@ -132,4 +132,6 @@ api.get(
   getThreadMessages
 );
 
+api.get('/ip', (request, response) => response.send(request.ip))
+
 module.exports = api;

@@ -41,7 +41,7 @@ const home = require('./routes/home');
 const api = require('./routes/api');
 
 // Tweak trust proxy for rate limiter
-app.set('trust proxy', parseInt(process.env.RATE_LIMIT_PROXY, 10))
+app.set('trust proxy', parseInt(process.env.RATE_LIMIT_PROXY, 10));
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));

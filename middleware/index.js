@@ -1,5 +1,7 @@
 const crypto = require('crypto');
+const openai = require('../config/openai');
 const logger = require('../config/logger');
+const LogEvent = require('../models/log-event');
 
 // Encryption and decryption functions
 const algorithm = 'aes-256-cbc';
@@ -45,6 +47,7 @@ function encrypt(text) {
  * @param {import('express').NextFunction} next - The next middleware function in the stack.
  */
 function getThreadId(req, res, next) {
+  logger.debug('inside getThreadId()');
   const encryptedId = req.cookies.threadId; // Retrieve the encrypted threadId from the cookie
   let threadId;
 
@@ -73,6 +76,7 @@ function getThreadId(req, res, next) {
  * @param {import('express').NextFunction} next - The next middleware function in the stack.
  */
 function setThreadId(req, res, next) {
+  logger.debug('inside setThreadId()');
   const { threadId } = req;
 
   if (threadId) {
@@ -92,7 +96,59 @@ function setThreadId(req, res, next) {
     } finally {
       next();
     }
+  } else {
+    next();
   }
 }
 
-module.exports = { getThreadId, setThreadId };
+/**
+ * Middleware to moderate the user's request.
+ *
+ * @param {import('express').Request} req - The request object.
+ * @param {import('express').Response} res - The response object.
+ * @param {import('express').NextFunction} next - The next middleware function in the stack.
+ */
+async function moderateRequest(req, res, next) {
+  logger.debug('inside moderateRequest()');
+  const { body: { content }, threadId } = req;
+  const who = req.user ? req.user.id : req.ip; // Use IP address if user is not present
+  const logEventData = {
+    who,
+    threadId: threadId || null,
+  };
+
+  try {
+    const moderation = await openai.moderations.create({ input: content });
+
+    if (moderation.results[0].flagged) {
+      const categories = moderation.results[0].categories;
+      const violatedPolicies = Object.keys(categories).filter(category => categories[category]);
+      const warning = `Request violated moderation policies: ${violatedPolicies.join(', ')}`;
+
+      logEventData.what = warning + `; content: ${content}`;
+      logEventData.logType = LogEvent.LogTypes.ERROR;
+
+      await LogEvent.create(logEventData);
+      logger.error(warning);
+      return next(new Error(warning));
+
+    } else {
+      logEventData.what = `Moderated request: ${content}`;
+      logEventData.logType = LogEvent.LogTypes.REQUEST;
+
+      await LogEvent.create(logEventData);
+      return next();
+    }
+  } catch (error) {
+    logger.error(JSON.stringify(error, null, 2));
+
+    logEventData.what = `Error in moderation: ${error.message}; content: ${content}`;
+    logEventData.logType = LogEvent.LogTypes.ERROR;
+
+    await LogEvent.create(logEventData);
+    return next(error);
+  }
+}
+
+
+module.exports = { getThreadId, setThreadId, moderateRequest };

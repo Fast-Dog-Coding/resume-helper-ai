@@ -17,7 +17,8 @@ function validateEnvVariables() {
     'OPEN_AI_PROJECT_ID',
     'OPEN_AI_PROJECT_SECRET',
     'RATE_LIMIT_AMOUNT',
-    'RATE_LIMIT_WINDOW_MS'
+    'RATE_LIMIT_WINDOW_MS',
+    'RATE_LIMIT_PROXY'
   ];
   const missingEnvVars = requiredEnv.filter(envVar => !process.env[envVar]);
 

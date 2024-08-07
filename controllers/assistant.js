@@ -1,6 +1,6 @@
 const openai = require('../config/openai');
 const logger = require('../config/logger');
-const { OPEN_AI_ASSISTANT_ID, OPEN_AI_MAX_PROMPT_TOKENS } = process.env;
+const { OPEN_AI_ASSISTANT_ID } = process.env;
 
 /**
  * Retrieves messages for a thread and returns them in chronological order as an array.
@@ -130,7 +130,7 @@ async function runThreadPoll(threadId) {
     threadId,
     {
       assistant_id: OPEN_AI_ASSISTANT_ID,
-      max_prompt_tokens: parseInt(OPEN_AI_MAX_PROMPT_TOKENS, 10)
+      // max_prompt_tokens: parseInt(OPEN_AI_MAX_PROMPT_TOKENS, 10)
     }
   );
 

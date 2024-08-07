@@ -2,13 +2,13 @@ const express = require('express');
 const { constants } = require('node:http2');
 const api = express.Router();
 const { addThreadMessage, retrieveThreadMessages, runThreadPoll } = require('../controllers/assistant');
-const { getThreadId, setThreadId } = require('../middleware');
+const { getThreadId, setThreadId, moderateRequest } = require('../middleware');
 const logger = require('../config/logger');
 const INTRODUCTION_MESSAGES = [
   { role: 'assistant', content: 'Welcome to **Grant\'s Resume Assistant** chatbot! You can ask me questions about a Grant Lindsay\'s resume or work experience, and I\'ll do my best to provide relevant information.'},
   { role: 'assistant', content: 'Feel free to start by asking a question. For example:\n\n**What does Grant do for work?** or\n\n**Please summarize Grant\'s skills.**'},
   { role: 'assistant', content: 'Also, you can list the skills you are in need of and then ask, "Would Grant be a good fit for this position?"'},
-  { role: 'assistant', content: '**Please note** that this application uses beta services from OpenAI and can make mistakes, even giving wrong answers. Do not make decisions based on these responses without first confirming they are correct.'}
+  { role: 'assistant', content: '**Please note** that this application uses beta services from OpenAI and can make mistakes, even giving wrong answers.\nDo not make decisions based on these responses without first confirming they are correct.'}
 ];
 
 /**
@@ -33,6 +33,7 @@ function formatMessage(message) {
  * @returns {Promise<Message>}
  */
 async function addMessage(req, res, next) {
+  logger.debug('inside addMessage()');
   const { body: { content } } = req;
   let { threadId } = req;
 
@@ -86,9 +87,11 @@ async function getThreadMessages(req, res, next) {
  * @returns {Promise<void>}
  */
 async function askAssistant(req, res, next) {
+  logger.debug('inside askAssistant()');
   const { threadId } = req;
 
   try {
+    logger.debug(`calling runThreadPoll("${threadId}")`);
     const messages = (await runThreadPoll(threadId))
       .map(formatMessage);
 
@@ -105,6 +108,7 @@ async function askAssistant(req, res, next) {
  * Handlers for path: /api/
  */
 
+// TODO: add logging of response
 /**
  * Posts a new user prompt to the thread and runs it.
  *
@@ -113,6 +117,7 @@ async function askAssistant(req, res, next) {
 api.post(
   '/ask-assistant',
   getThreadId,
+  moderateRequest,
   addMessage,
   setThreadId,
   askAssistant

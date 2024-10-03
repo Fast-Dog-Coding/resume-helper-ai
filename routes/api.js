@@ -2,8 +2,13 @@ const express = require('express');
 const { constants } = require('node:http2');
 const api = express.Router();
 const { addThreadMessage, retrieveThreadMessages, runThreadPoll } = require('../controllers/assistant');
-const { getThreadId, setThreadId, moderateRequest } = require('../middleware');
+const {
+  getThreadId,
+  setThreadId,
+  moderateRequest
+} = require('../middleware');
 const logger = require('../config/logger');
+const { logEvent, LogTypes } = require('../utils');
 const INTRODUCTION_MESSAGES = [
   { role: 'assistant', content: 'Welcome to **Grant\'s Resume Assistant** chatbot! You can ask me questions about a Grant Lindsay\'s resume or work experience, and I\'ll do my best to provide relevant information.'},
   { role: 'assistant', content: 'Feel free to start by asking a question. For example:\n\n**What does Grant do for work?** or\n\n**Please summarize Grant\'s skills.**'},
@@ -40,6 +45,12 @@ async function addMessage(req, res, next) {
   try {
     threadId = await addThreadMessage(threadId, content);
     logger.info(`Added Message to Thread: ${threadId}, content: ${content}`);
+    await logEvent(
+      req.user ? req.user.id : req.ip,
+      content,
+      threadId,
+      LogTypes.REQUEST
+    );
     req.threadId = threadId;
 
     next();
@@ -95,6 +106,14 @@ async function askAssistant(req, res, next) {
     const messages = (await runThreadPoll(threadId))
       .map(formatMessage);
 
+    // Log response
+    await logEvent(
+      req.user ? req.user.id : req.ip,
+      messages[messages.length - 1]?.content,
+      threadId,
+      LogTypes.RESPONSE
+    );
+
     res
       .status(constants.HTTP_STATUS_OK)
       .json({ messages });
@@ -108,7 +127,6 @@ async function askAssistant(req, res, next) {
  * Handlers for path: /api/
  */
 
-// TODO: add logging of response
 /**
  * Posts a new user prompt to the thread and runs it.
  *

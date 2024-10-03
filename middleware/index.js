@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const openai = require('../config/openai');
 const logger = require('../config/logger');
-const LogEvent = require('../models/log-event');
+const { logEvent, LogTypes } = require('../utils');
 
 // Encryption and decryption functions
 const algorithm = 'aes-256-cbc';
@@ -112,10 +112,6 @@ async function moderateRequest(req, res, next) {
   logger.debug('inside moderateRequest()');
   const { body: { content }, threadId } = req;
   const who = req.user ? req.user.id : req.ip; // Use IP address if user is not present
-  const logEventData = {
-    who,
-    threadId: threadId || null,
-  };
 
   try {
     const moderation = await openai.moderations.create({ input: content });
@@ -124,31 +120,23 @@ async function moderateRequest(req, res, next) {
       const categories = moderation.results[0].categories;
       const violatedPolicies = Object.keys(categories).filter(category => categories[category]);
       const warning = `Request violated moderation policies: ${violatedPolicies.join(', ')}`;
+      const what = warning + `; content: ${content}`;
 
-      logEventData.what = warning + `; content: ${content}`;
-      logEventData.logType = LogEvent.LogTypes.ERROR;
-
-      await LogEvent.create(logEventData);
+      await logEvent(who, what, threadId, LogTypes.WARNING);
       logger.error(warning);
+
       return next(new Error(warning));
 
     } else {
-      logEventData.what = `Moderated request: ${content}`;
-      logEventData.logType = LogEvent.LogTypes.REQUEST;
-
-      await LogEvent.create(logEventData);
       return next();
     }
   } catch (error) {
     logger.error(JSON.stringify(error, null, 2));
+    const what = `Error in moderation: ${error.message}; content: ${content}`;
+    await logEvent(who, what, threadId, LogTypes.ERROR);
 
-    logEventData.what = `Error in moderation: ${error.message}; content: ${content}`;
-    logEventData.logType = LogEvent.LogTypes.ERROR;
-
-    await LogEvent.create(logEventData);
     return next(error);
   }
 }
-
 
 module.exports = { getThreadId, setThreadId, moderateRequest };

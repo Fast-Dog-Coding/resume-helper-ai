@@ -26,13 +26,14 @@ const logEventSchema = new Schema({
   logType: {
     type: String,
     required: true,
-    enum: ['request', 'error', 'warning']
+    enum: ['request', 'response', 'error', 'warning']
   }
 });
 
 // Add static property for logType values
 logEventSchema.statics.LogTypes = {
   REQUEST: 'request',
+  RESPONSE: 'response',
   ERROR: 'error',
   WARNING: 'warning'
 };

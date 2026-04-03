@@ -2,6 +2,8 @@ const winston = require('winston');
 const { combine, printf, timestamp, colorize } = winston.format;
 require('winston-daily-rotate-file');
 
+const LOG_DIR = process.env.LOG_DIR || 'logs/';
+
 // Format for file logs
 const fileLogFormat = combine(
   timestamp(),
@@ -29,13 +31,13 @@ const logger = winston.createLogger({
   format: fileLogFormat,
   transports: [
     new winston.transports.DailyRotateFile({
-      filename: 'combined-%DATE%.log',
+      filename: LOG_DIR + 'combined-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
       maxSize: '20m',
       maxFiles: '14d'
     }),
     new winston.transports.DailyRotateFile({
-      filename: 'error-%DATE%.log',
+      filename: LOG_DIR + 'error-%DATE%.log',
       level: 'error',
       datePattern: 'YYYY-MM-DD',
       maxSize: '20m',
@@ -53,11 +55,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Handle uncaught exceptions and rejections
 logger.exceptions.handle(
-  new winston.transports.File({ filename: 'exceptions.log' })
+  new winston.transports.File({ filename: LOG_DIR + 'exceptions.log' })
 );
 
 logger.rejections.handle(
-  new winston.transports.File({ filename: 'rejections.log' })
+  new winston.transports.File({ filename: LOG_DIR + 'rejections.log' })
 );
 
 logger.log(logger.level, `Logging set to ${logger.level}`);

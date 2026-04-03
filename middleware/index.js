@@ -5,7 +5,7 @@ const { logEvent, LogTypes } = require('../utils');
 
 // Encryption and decryption functions
 const algorithm = 'aes-256-cbc';
-const key = crypto.randomBytes(32); // Generate a random key for encryption
+const key = Buffer.from(process.env.COOKIE_ENCRYPTION_KEY, 'hex'); // Enforced via validateEnv
 
 /**
  * Decrypts text encrypted with the encrypt function.
@@ -88,7 +88,12 @@ function setThreadId(req, res, next) {
 
       logger.debug(`encryptedId: ${encryptedId}`);
       logger.debug(`expirationDate: ${(new Date(expirationDate)).toISOString()}`);
-      res.cookie('threadId', encryptedId, { expires: expirationDate }); // Set the encrypted resourceId in a cookie
+      res.cookie('threadId', encryptedId, {
+        expires: expirationDate,
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production'
+      }); // Set the encrypted resourceId in a cookie
 
     } catch (error) {
       logger.error(JSON.stringify(error, null, 2));

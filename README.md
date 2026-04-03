@@ -3,7 +3,7 @@
 Ask an AI about Grant's skills and work experience.
 
 ## Overview
-The Resume Assistant Chatbot is a simple web application that allows users to query an AI about a Grant Lindsay's resume and work experience. The chatbot sends user questions to an AI (OpenAI's ChatGPT) and displays the responses in a chat-like interface.
+The Resume Assistant Chatbot is a simple web application that allows users to query an AI about Grant Lindsay's resume and work experience. The chatbot sends user questions to an AI (OpenAI's ChatGPT) and displays the responses in a chat-like interface.
 
 ## Purpose
 This application was built to showcase Grant's skills in using emerging technologies, such as AI, and to demonstrate his ability to create interactive, full-stack web applications.
@@ -16,7 +16,7 @@ This application was built to showcase Grant's skills in using emerging technolo
 1. Clone the repository to your local machine.
 2. Navigate to the project directory.
 3. Install dependencies by running `npm install`.
-4. Create an `.env` file with your API keys. (See `sample.env` for reference.) 
+4. Create an `.env` file with your API keys. (See `.env.sample` for reference.) 
     - You will need an OpenAI developer account and a MongoDB account. (Or you can remove the MongoDB code, since it is used only for logging.)
 5. Start the application by running `npm start`.
 6. Open your web browser and navigate to `http://localhost:3100` to access the chatbot interface.

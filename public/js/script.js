@@ -1,11 +1,14 @@
 // IIFE to avoid polluting the global scope
-(function() {
+(function () {
   // DOM elements
   const chatContainer = document.getElementById('chatContainer');
   const questionInput = document.getElementById('questionInput');
   const submitBtn = document.getElementById('submitBtn');
   const resetBtn = document.getElementById('resetBtn');
   const loadingMessage = document.getElementById('loading-message');
+  const infoBtn = document.getElementById('infoBtn');
+  const closeInfoBtn = document.getElementById('closeInfoBtn');
+  const infoPanel = document.getElementById('infoPanel');
 
   // Event listeners for input and buttons
   questionInput.addEventListener('keypress', (event) => {
@@ -15,6 +18,21 @@
   });
   submitBtn.addEventListener('click', submitQuestion);
   resetBtn.addEventListener('click', resetThread);
+
+  infoBtn.addEventListener('click', () => {
+    infoPanel.classList.add('open');
+  });
+
+  closeInfoBtn.addEventListener('click', () => {
+    infoPanel.classList.remove('open');
+  });
+
+  // Close panel when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!infoPanel.contains(event.target) && !infoBtn.contains(event.target) && infoPanel.classList.contains('open')) {
+      infoPanel.classList.remove('open');
+    }
+  });
 
   /**
    * Toggles the input fields and buttons to be enabled or disabled.
@@ -39,9 +57,16 @@
       headers: { 'Content-Type': 'application/json' },
       ...options
     })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          let errorMsg = 'Network response was not ok';
+          try {
+            const data = await response.json();
+            errorMsg = data.error || data.message || errorMsg;
+          } catch (e) {
+            // keep default if not json
+          }
+          throw new Error(errorMsg);
         }
         return response.json();
       });
@@ -52,7 +77,12 @@
    */
   function getThreadMessages() {
     fetchData('/api/thread/messages')
-      .then(data => setMessages(data.messages))
+      .then(data => {
+        setMessages(data.messages);
+        if (data.messages.length === 0) {
+          infoPanel.classList.add('open');
+        }
+      })
       .catch(handleError);
   }
 
@@ -122,6 +152,7 @@
   function setMessages(messages) {
     chatContainer.innerHTML = '';
     messages.forEach(message => addMessage(message.content, message.role));
+    scrollToBottom();
   }
 
   /**
@@ -158,8 +189,10 @@
    * Resets the current thread by expiring the threadId cookie.
    */
   function resetThread() {
-    document.cookie = 'threadId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    getThreadMessages();
+    if (confirm("Clear this chat? Really?")) {
+      document.cookie = 'threadId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      setMessages([]);
+    }
   }
 
   /**
@@ -169,7 +202,11 @@
    */
   function handleError(error) {
     console.error('Error:', error);
-    addMessage('Sorry, an error occurred. Please try again.', 'assistant');
+    let msg = 'Sorry, an error occurred. Please try again.';
+    if (error.message && error.message.includes('violated moderation policies')) {
+      msg = "I can't help with that.";
+    }
+    addMessage(msg, 'assistant');
   }
 
   // Observe changes in the chat container using MutationObserver

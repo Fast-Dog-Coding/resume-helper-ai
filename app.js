@@ -53,8 +53,12 @@ app.use(morgan('combined', { stream: { write: (message) => logger.info(message.t
 // Security enhancements
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: [ "'self'" ],
-    scriptSrc: [ "'self'", 'https://cdn.jsdelivr.net/npm/marked/marked.min.js' ]
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", 'https://cdn.jsdelivr.net/npm/marked/marked.min.js'],
+    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    imgSrc: ["'self'", "data:"],
+    fontSrc: ["'self'", "https://fonts.gstatic.com"],
+    connectSrc: ["'self'"]
   }
 }));
 
@@ -79,8 +83,13 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'production' ? {} : err;
 
+  const status = err.status || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(status).json({ error: err.message });
+  }
+
   // Render the error page
-  res.status(err.status || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR);
+  res.status(status);
   res.render('error');
 });
 

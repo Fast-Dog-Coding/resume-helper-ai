@@ -10,8 +10,7 @@ function validateEnvVariables() {
   const requiredEnv = [
     'MONGODB_CONNECTION',
     'MONGODB_DB_NAME',
-    'MONGODB_ID',
-    'MONGODB_SECRET',
+    'COOKIE_ENCRYPTION_KEY',
     'OPEN_AI_ASSISTANT_ID',
     'OPEN_AI_ORGANIZATION_ID',
     'OPEN_AI_PROJECT_ID',

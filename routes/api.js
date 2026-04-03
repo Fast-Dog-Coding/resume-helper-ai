@@ -9,12 +9,6 @@ const {
 } = require('../middleware');
 const logger = require('../config/logger');
 const { logEvent, LogTypes } = require('../utils');
-const INTRODUCTION_MESSAGES = [
-  { role: 'assistant', content: 'Welcome to **Grant\'s Resume Assistant** chatbot! You can ask me questions about a Grant Lindsay\'s resume or work experience, and I\'ll do my best to provide relevant information.'},
-  { role: 'assistant', content: 'Feel free to start by asking a question. For example:\n\n**What does Grant do for work?** or\n\n**Please summarize Grant\'s skills.**'},
-  { role: 'assistant', content: 'Also, you can list the skills you are in need of and then ask, "Would Grant be a good fit for this position?"'},
-  { role: 'assistant', content: '**Please note** that this application uses beta services from OpenAI and can make mistakes, even giving wrong answers.\nDo not make decisions based on these responses without first confirming they are correct.'}
-];
 
 /**
  * Transforms the content of the message for display.
@@ -42,15 +36,29 @@ async function addMessage(req, res, next) {
   const { body: { content } } = req;
   let { threadId } = req;
 
+  if (!content || typeof content !== 'string') {
+    return res.status(400).json({ error: 'Message content is required.' });
+  }
+
+  if (content.length > 8000) {
+    return res.status(400).json({ error: 'Message content must be 8,000 characters or less.' });
+  }
+
   try {
     threadId = await addThreadMessage(threadId, content);
     logger.info(`Added Message to Thread: ${threadId}, content: ${content}`);
-    await logEvent(
-      req.user ? req.user.id : req.ip,
-      content,
-      threadId,
-      LogTypes.REQUEST
-    );
+
+    try {
+      await logEvent(
+        req.user ? req.user.id : req.ip,
+        content,
+        threadId,
+        LogTypes.REQUEST
+      );
+    } catch (logErr) {
+      logger.error(`Failed to log request event: ${logErr.message}`);
+    }
+
     req.threadId = threadId;
 
     next();
@@ -73,11 +81,6 @@ async function getThreadMessages(req, res, next) {
   try {
     let messages = (await retrieveThreadMessages(threadId))
       .map(formatMessage);
-
-    // if there are no messages (no such thread), send the introduction messages.
-    if (messages.length < 1) {
-      messages = INTRODUCTION_MESSAGES;
-    }
 
     res
       .status(constants.HTTP_STATUS_OK)
@@ -106,13 +109,17 @@ async function askAssistant(req, res, next) {
     const messages = (await runThreadPoll(threadId))
       .map(formatMessage);
 
-    // Log response
-    await logEvent(
-      req.user ? req.user.id : req.ip,
-      messages[messages.length - 1]?.content,
-      threadId,
-      LogTypes.RESPONSE
-    );
+    try {
+      // Log response
+      await logEvent(
+        req.user ? req.user.id : req.ip,
+        messages[messages.length - 1]?.content || 'Empty response',
+        threadId,
+        LogTypes.RESPONSE
+      );
+    } catch (logErr) {
+      logger.error(`Failed to log response event: ${logErr.message}`);
+    }
 
     res
       .status(constants.HTTP_STATUS_OK)

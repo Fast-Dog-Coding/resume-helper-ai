@@ -97,15 +97,16 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-bottom: 90px;
 }
 
 .chat-container::-webkit-scrollbar {
   width: 8px;
 }
+
 .chat-container::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .chat-container::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
   border-radius: 4px;
@@ -123,7 +124,7 @@ body {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 15px rgba(0,0,0,0.5);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.5);
 }
 
 .slideout-panel.open {
@@ -168,9 +169,6 @@ body {
 }
 
 .input-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -186,10 +184,11 @@ body {
   max-width: 800px;
   width: 100%;
   display: flex;
+  align-items: end;
   gap: 10px;
 }
 
-input[type="text"] {
+textarea {
   flex: 1;
   padding: 12px 16px;
   background-color: var(--surface-color-light);
@@ -198,19 +197,22 @@ input[type="text"] {
   border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
+  resize: none;
+  max-height: 100px;
   transition: border-color 0.2s;
 }
 
-input[type="text"]:focus {
+textarea:focus {
   outline: none;
   border-color: var(--accent-color);
 }
 
-input[type="text"]::placeholder {
+textarea::placeholder {
   color: var(--border-color);
 }
 
-button.primary-btn, button.danger-btn {
+button.primary-btn,
+button.danger-btn {
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -264,14 +266,31 @@ button:disabled {
   border-bottom-left-radius: 4px;
 }
 
-.message p:first-child { margin-top: 0; }
-.message p:last-child { margin-bottom: 0; }
-.message pre { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; overflow-x: auto; }
-.message code { font-family: monospace; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 3px;}
+.message p:first-child {
+  margin-top: 0;
+}
+
+.message p:last-child {
+  margin-bottom: 0;
+}
+
+.message pre {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.message code {
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
 
 .loading-message {
   position: absolute;
-  bottom: 100px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   color: var(--text-primary);
@@ -281,7 +300,7 @@ button:disabled {
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
@@ -289,17 +308,21 @@ button:disabled {
   .message {
     max-width: 90%;
   }
+
   .slideout-panel {
     width: 100%;
     right: -100%;
   }
+
   .input-wrapper {
     flex-wrap: wrap;
   }
+
   input[type="text"] {
     min-width: 100%;
     margin-bottom: 8px;
   }
+
   button.danger-btn {
     margin-left: auto;
   }

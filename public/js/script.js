@@ -11,11 +11,17 @@
   const infoPanel = document.getElementById('infoPanel');
 
   // Event listeners for input and buttons
-  questionInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
+  questionInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       submitQuestion();
     }
   });
+  questionInput.addEventListener('input', (event) => {
+    event.target.style.height = 'auto';
+    event.target.style.height = event.target.scrollHeight + 'px';
+  });
+
   submitBtn.addEventListener('click', submitQuestion);
   resetBtn.addEventListener('click', resetThread);
 
@@ -141,6 +147,7 @@
         });
 
       questionInput.value = '';
+      questionInput.style.height = 'auto';
     }
   }
 

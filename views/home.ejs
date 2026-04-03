@@ -1,62 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Grant's Resume Assistant - Ask questions about Grant Lindsay's skills and experience.">
-    <title><%= title %></title>
+    <meta name="description"
+        content="Grant's Resume Assistant - Ask questions about Grant Lindsay's skills and experience.">
+    <title>
+        <%= title %>
+    </title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<header class="app-header">
-    <div class="header-content">
-        <div class="header-title">
-            <h1>Grant Lindsay</h1>
-            <p>AI Resume Assistant</p>
-        </div>
-        <button class="icon-button" id="infoBtn" title="How to use this" aria-label="Information">ⓘ</button>
-    </div>
-</header>
-
-<div class="main-wrapper">
-    <!-- Slideout Panel -->
-    <aside class="slideout-panel" id="infoPanel">
-        <div class="panel-header">
-            <h2>Welcome</h2>
-            <button class="icon-button close-btn" id="closeInfoBtn" aria-label="Close">×</button>
-        </div>
-        <div class="panel-content text-content">
-            <p>Ask me questions about Grant's career, skills, and work experience.</p>
-            <p><strong>Try asking:</strong></p>
-            <ul>
-                <li>"What does Grant do for work?"</li>
-                <li>"Summarize Grant's technical skills."</li>
-            </ul>
-            <p><strong>Recruiters & Hiring Managers:</strong><br>
-            You can paste your job requirements and ask, <em>"Would Grant be a good fit for this position?"</em></p>
-            <div class="disclaimer">
-                <p><em>Note: This bot uses AI and can occasionally make mistakes. Please verify important details directly with Grant.</em></p>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-title">
+                <h1>Grant Lindsay</h1>
+                <p>AI Resume Assistant</p>
             </div>
+            <button class="icon-button" id="infoBtn" title="How to use this" aria-label="Information">ⓘ</button>
         </div>
-    </aside>
+    </header>
 
-    <div class="chat-area">
-        <p id="loading-message" class="loading-message" hidden></p>
-        <div class="chat-container" id="chatContainer"></div>
+    <div class="main-wrapper">
+        <!-- Slideout Panel -->
+        <aside class="slideout-panel" id="infoPanel">
+            <div class="panel-header">
+                <h2>Welcome</h2>
+                <button class="icon-button close-btn" id="closeInfoBtn" aria-label="Close">×</button>
+            </div>
+            <div class="panel-content text-content">
+                <p>Ask me questions about Grant's career, skills, and work experience.</p>
+                <p><strong>Try asking:</strong></p>
+                <ul>
+                    <li>"What does Grant do for work?"</li>
+                    <li>"Summarize Grant's technical skills."</li>
+                </ul>
+                <p><strong>Recruiters & Hiring Managers:</strong><br>
+                    You can paste your job requirements and ask, <em>"Would Grant be a good fit for this position?"</em>
+                </p>
+                <div class="disclaimer">
+                    <p><em>Note: This bot uses AI and can occasionally make mistakes. Please verify important details
+                            directly with Grant.</em></p>
+                </div>
+            </div>
+        </aside>
+
+        <div class="chat-area">
+            <p id="loading-message" class="loading-message" hidden></p>
+            <div class="chat-container" id="chatContainer"></div>
+        </div>
     </div>
-</div>
 
-<div class="input-container glass-panel">
-    <div class="input-wrapper">
-        <input type="text" id="questionInput" placeholder="Ask a question about Grant..." aria-label="Question Input">
-        <button id="submitBtn" class="primary-btn">Ask</button>
-        <button id="resetBtn" class="danger-btn">Reset</button>
+    <div class="input-container glass-panel">
+        <div class="input-wrapper">
+            <textarea id="questionInput" rows="1" placeholder="Ask a question about Grant..."
+                aria-label="Question Input"></textarea>
+            <button id="submitBtn" class="primary-btn">Ask</button>
+            <button id="resetBtn" class="danger-btn">Reset</button>
+        </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
+
 </html>

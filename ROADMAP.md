@@ -3,10 +3,11 @@
 This document outlines planned improvements, technical debt, and new features for the assistant.
 
 ## Rename
-- Rename the project to "Resume Concierge".
+- Rename the project to "Resume Concierge". (Actual name up for discussion.)
 
 ## Platform Migration
-- **Migrate away from OpenAI Assistants API:** The current API is being deprecated. We need to refactor the backend communication to use the generic OpenAI Chat Completions API (Responses API) or migrate to a new LLM provider like Gemini.
+- **Migrate away from OpenAI Assistants API:** The current API is being deprecated. We need to refactor the backend communication to use the generic OpenAI Chat Completions API (Responses API) or migrate to a new LLM provider like Gemini. Another option to evaluate is OpenRouter.
+- **Adopt File Search Stores:** For RAG of resume, projects, and other relevant files for the LLM to use to annswer questions. 
 
 ## New Features
 - **AI Files/Context Expansions:** Add a list of courses taken, dates completed, and content descriptions to better ground the AI's responses about continuous learning and background.

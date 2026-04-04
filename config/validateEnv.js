@@ -8,14 +8,14 @@ const logger = require('./logger');
  */
 function validateEnvVariables() {
   const requiredEnv = [
+    'APP_HTTP_REFERER',
+    'APP_TITLE',
     'MONGODB_CONNECTION',
     'MONGODB_DB_NAME',
-    'MONGODB_ID',
-    'MONGODB_SECRET',
-    'OPEN_AI_ASSISTANT_ID',
-    'OPEN_AI_ORGANIZATION_ID',
-    'OPEN_AI_PROJECT_ID',
-    'OPEN_AI_PROJECT_SECRET',
+    'COOKIE_ENCRYPTION_KEY',
+    'OPENROUTER_API_KEY',
+    'OPENROUTER_BASE_URL',
+    'OPENROUTER_MODELS',
     'RATE_LIMIT_AMOUNT',
     'RATE_LIMIT_WINDOW_MS',
     'RATE_LIMIT_PROXY'

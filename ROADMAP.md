@@ -1,9 +1,9 @@
-# Resume Helper AI — Roadmap
+# Candidate Concierge — Roadmap
 
 This document outlines planned improvements, technical debt, and new features for the assistant.
 
 ## Rename
-- Rename the project to "Resume Concierge". (Actual name up for discussion.)
+- ~~Rename the project to "Candidate Concierge".~~ (Done)
 
 ## Platform Migration
 - **Migrate away from OpenAI Assistants API:** The current API is being deprecated. We need to refactor the backend communication to use the generic OpenAI Chat Completions API (Responses API) or migrate to a new LLM provider like Gemini. Another option to evaluate is OpenRouter.

@@ -1,9 +1,9 @@
-# Resume Assistant Chatbot
+# Candidate Concierge
 
 Ask an AI about Grant's skills and work experience.
 
 ## Overview
-The Resume Assistant Chatbot is a simple web application that allows users to query an AI about Grant Lindsay's resume and work experience. The chatbot sends user questions to an AI (OpenAI's ChatGPT) and displays the responses in a chat-like interface.
+The Candidate Concierge is a simple web application that allows users to query an AI about Grant Lindsay's resume and work experience. The concierge uses an AI (LLM) and displays the responses in a chat-like interface.
 
 ## Purpose
 This application was built to showcase Grant's skills in using emerging technologies, such as AI, and to demonstrate his ability to create interactive, full-stack web applications.

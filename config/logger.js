@@ -1,5 +1,6 @@
 const winston = require('winston');
 const { combine, printf, timestamp, colorize } = winston.format;
+require('winston-mongodb');
 require('winston-daily-rotate-file');
 
 const LOG_DIR = process.env.LOG_DIR || 'logs/';
@@ -42,6 +43,11 @@ const logger = winston.createLogger({
       datePattern: 'YYYY-MM-DD',
       maxSize: '20m',
       maxFiles: '30d'
+    }),
+    new winston.transports.MongoDB({
+      db: process.env.MONGODB_CONNECTION,
+      collection: 'server_logs',
+      level: 'warn', // Captures 'warn' and 'error' logs
     })
   ]
 });

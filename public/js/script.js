@@ -197,8 +197,9 @@
    */
   function resetThread() {
     if (confirm("Clear this chat? Really?")) {
-      document.cookie = 'threadId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      setMessages([]);
+      fetch('/api/thread', { method: 'DELETE' }).then(() => {
+        setMessages([]);
+      });
     }
   }
 

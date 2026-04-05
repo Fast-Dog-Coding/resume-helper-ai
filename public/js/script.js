@@ -7,7 +7,6 @@
   const resetBtn = document.getElementById('resetBtn');
   const loadingMessage = document.getElementById('loading-message');
   const infoBtn = document.getElementById('infoBtn');
-  const closeInfoBtn = document.getElementById('closeInfoBtn');
   const infoPanel = document.getElementById('infoPanel');
 
   // Event listeners for input and buttons
@@ -18,25 +17,34 @@
     }
   });
   questionInput.addEventListener('input', (event) => {
-    event.target.style.height = 'auto';
-    event.target.style.height = event.target.scrollHeight + 'px';
+    event.target.style.height = '1px'; // Reset to get correct scrollHeight
+    const newHeight = event.target.scrollHeight;
+    event.target.style.height = newHeight + 'px';
   });
 
   submitBtn.addEventListener('click', submitQuestion);
   resetBtn.addEventListener('click', resetThread);
 
-  infoBtn.addEventListener('click', () => {
-    infoPanel.classList.add('open');
-  });
+  function updateInfoToggleState() {
+    if (infoPanel.classList.contains('open')) {
+      infoBtn.textContent = '×';
+      infoBtn.style.fontSize = '1.8rem'; // make X prominent
+    } else {
+      infoBtn.textContent = 'ⓘ';
+      infoBtn.style.fontSize = '1.5rem';
+    }
+  }
 
-  closeInfoBtn.addEventListener('click', () => {
-    infoPanel.classList.remove('open');
+  infoBtn.addEventListener('click', () => {
+    infoPanel.classList.toggle('open');
+    updateInfoToggleState();
   });
 
   // Close panel when clicking outside
   document.addEventListener('click', (event) => {
     if (!infoPanel.contains(event.target) && !infoBtn.contains(event.target) && infoPanel.classList.contains('open')) {
       infoPanel.classList.remove('open');
+      updateInfoToggleState();
     }
   });
 
@@ -182,23 +190,12 @@
   function scrollToBottom() {
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
-
-  /**
-   * Sets the height of the chat container dynamically based on available space.
-   */
-  function setChatContainerHeight() {
-    const inputContainerHeight = document.querySelector('.input-container').offsetHeight;
-    const availableHeight = window.innerHeight - inputContainerHeight;
-    chatContainer.style.height = `${availableHeight}px`;
-  }
-
-  /**
-   * Resets the current thread by expiring the threadId cookie.
-   */
   function resetThread() {
     if (confirm("Clear this chat? Really?")) {
       fetch('/api/thread', { method: 'DELETE' }).then(() => {
         setMessages([]);
+        questionInput.value = '';
+        questionInput.style.height = 'auto';
       });
     }
   }
@@ -220,10 +217,6 @@
   // Observe changes in the chat container using MutationObserver
   const observer = new MutationObserver(() => scrollToBottom());
   observer.observe(chatContainer, { childList: true });
-
-  // Adjust the height of the chat container on window load and resize
-  window.addEventListener('load', setChatContainerHeight);
-  window.addEventListener('resize', setChatContainerHeight);
 
   // Initial call to fetch messages for the current thread
   getThreadMessages();

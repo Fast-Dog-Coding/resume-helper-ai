@@ -31,7 +31,7 @@ body {
   background-color: rgba(26, 29, 36, 0.8);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
-  padding: 12px 20px;
+  padding: 8px 20px;
   z-index: 100;
 }
 
@@ -44,20 +44,22 @@ body {
 }
 
 .header-title h1 {
-  margin: 0.5rem 0;
-  font-size: 1.2rem;
+  margin: 0 0 2px 0;
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
 .header-title h2 {
-  margin: 0.25rem 0;
-  font-size: 1.0rem;
+  margin: 0 0 2px 0;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
 .header-title p {
-  margin: 2px 0 0;
-  font-size: 0.85rem;
+  margin: 0 0 4px 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-secondary);
 }
 
@@ -93,6 +95,7 @@ body {
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
+  overflow: hidden;
 }
 
 .chat-container {
@@ -194,6 +197,7 @@ body {
 }
 
 textarea {
+  box-sizing: border-box;
   flex: 1;
   padding: 12px 16px;
   background-color: var(--surface-color-light);
@@ -204,6 +208,7 @@ textarea {
   font-family: inherit;
   resize: none;
   max-height: 100px;
+  overflow-y: auto;
   transition: border-color 0.2s;
 }
 
@@ -321,14 +326,21 @@ button:disabled {
 
   .input-wrapper {
     flex-wrap: wrap;
+    gap: 8px;
   }
 
-  input[type="text"] {
+  textarea {
+    width: 100%;
     min-width: 100%;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
   }
 
-  button.danger-btn {
-    margin-left: auto;
+  .input-wrapper button.primary-btn {
+    flex: 1;
+  }
+
+  .input-wrapper button.danger-btn {
+    flex: 1;
+    margin-left: 0;
   }
 }

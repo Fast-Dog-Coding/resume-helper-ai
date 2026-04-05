@@ -8,6 +8,7 @@ This document outlines planned improvements, technical debt, and new features fo
 ## Platform Migration
 - **Migrate away from OpenAI Assistants API:** The current API is being deprecated. We need to refactor the backend communication to use the generic OpenAI Chat Completions API (Responses API) or migrate to a new LLM provider like Gemini. Another option to evaluate is OpenRouter.
 - **Adopt File Search Stores:** For RAG of resume, projects, and other relevant files for the LLM to use to annswer questions. 
+- **Move to New Host:** AWS App Runner, which hosts this app, will be deprecated in 2027. Their suggestion is to migrate to Amazon ECS Express Mode. There may be better choices.
 
 ## New Features
 - **AI Files/Context Expansions:** Add a list of courses taken, dates completed, and content descriptions to better ground the AI's responses about continuous learning and background.

@@ -1,7 +1,7 @@
 const OpenAI = require('openai');
 const logger = require('../config/logger');
 const Thread = require('../models/Thread');
-const resumeContext = require('../config/context');
+const { buildContext } = require('../config/context');
 
 const models = JSON.parse(process.env.OPENROUTER_MODELS || '[google/gemini-1.5-pro]');
 
@@ -19,6 +19,7 @@ async function processChat(threadId, newContent) {
     // 1. Fetch from Mongo or Create new Thread
     let thread = await Thread.findOne({ threadId });
     if (!thread) {
+      const resumeContext = await buildContext();
       thread = new Thread({
         threadId,
         messages: [{ role: 'system', content: resumeContext }]

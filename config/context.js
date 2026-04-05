@@ -1,32 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('./logger');
+const Knowledge = require('../models/Knowledge');
 
-function preloadContextCache() {
+async function buildContext() {
     // 1. Get the local, project-specific system instructions
     const instructionsPath = path.join(__dirname, 'instructions.md');
-    const dataDir = path.join(process.cwd(), 'data'); // Your shared symlink
 
     try {
         let finalContext = fs.readFileSync(instructionsPath, 'utf8') + '\n\n';
         finalContext += '[STATIC KNOWLEDGE BASE BOUNDARY START]\n';
 
-        // 2. Load all shared markdown knowledge base files (if directory exists)
+        // 2. Load all shared knowledge base records from MongoDB
         try {
-            if (fs.existsSync(dataDir)) {
-                const files = fs.readdirSync(dataDir).filter(f => f.endsWith('.md'));
-
-                for (const file of files) {
-                    const filePath = path.join(dataDir, file);
-                    const content = fs.readFileSync(filePath, 'utf8');
-                    finalContext += `---\nFILE NAME: ${file}\n---\n${content}\n\n`;
-                }
-                logger.info(`Preloaded local instructions and ${files.length} shared context documents into memory.`);
-            } else {
-                logger.warn(`Context Warning: Data directory not found at ${dataDir}. Skipping shared context files.`);
+            const knowledgeDocs = await Knowledge.find().sort({ sortOrder: 1 }).exec();
+            
+            for (const doc of knowledgeDocs) {
+                finalContext += `---\nFILE NAME: ${doc.title}\n---\n${doc.content}\n\n`;
             }
-        } catch (dirError) {
-            logger.error(`Error reading data directory: ${dirError.message}`);
+            logger.info(`Loaded local instructions and ${knowledgeDocs.length} context documents from MongoDB.`);
+        } catch (dbError) {
+            logger.error(`Error reading Knowledge from MongoDB: ${dbError.message}`);
         }
 
         finalContext += '[STATIC KNOWLEDGE BASE BOUNDARY END]\n';
@@ -38,5 +32,4 @@ function preloadContextCache() {
     }
 }
 
-// Export the compiled chunk directly
-module.exports = preloadContextCache();
+module.exports = { buildContext };

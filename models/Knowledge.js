@@ -19,7 +19,7 @@ const knowledgeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-});
+}, { collection: 'knowledge' });
 
 knowledgeSchema.index({ keywords: 1 });
 

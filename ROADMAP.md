@@ -12,7 +12,7 @@ This document outlines planned improvements, technical debt, and new features fo
 
 ## New Features
 - [ ] **AI Files/Context Expansions:** Add a list of courses taken, dates completed, and content descriptions to better ground the AI's responses about continuous learning and background.
-- [ ] **Improved "Progress" Messaging:** Swap the generic loading messages for a rotation of random "Dad jokes" to keep the experience light and uniquely human while the bot is "thinking".
+- ~~**Improved "Progress" Messaging:** Swap the generic loading messages for a rotation of random "Dad jokes" to keep the experience light and uniquely human while the bot is "thinking".~~ (Done — messages served from `config/ui.js` via EJS template injection into `window.APP_CONFIG`)
 - ~~**UI > New Lines:** Allow user to add new lines to questions. Other LLM's inputs permit [shift] + [enter] to add a new line and [enter] for sending.~~ (Done)
 
 ## Reliability & Maintainability

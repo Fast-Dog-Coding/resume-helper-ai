@@ -106,11 +106,9 @@
    * @returns {number} The interval ID.
    */
   function startProgressMessage() {
-    const messages = [
+    const messages = (window.APP_CONFIG && window.APP_CONFIG.loadingMessages) || [
       'I\'m looking...',
       'Still working...',
-      'Hmmm...',
-      'Thanks for being patient...',
       'Almost there...'
     ];
     let index = 0;

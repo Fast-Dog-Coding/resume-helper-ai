@@ -1,24 +1,25 @@
-const fs = require('fs');
-const path = require('path');
 const logger = require('./logger');
 const Knowledge = require('../models/Knowledge');
+const Config = require('../models/Config');
 
 async function buildContext() {
-    // 1. Get the local, project-specific system instructions
-    const instructionsPath = path.join(__dirname, 'instructions.md');
-
     try {
-        let finalContext = fs.readFileSync(instructionsPath, 'utf8') + '\n\n';
+        // 1. Load system instructions from MongoDB Config collection
+        const instructionsDoc = await Config.findOne({ key: 'concierge_instructions' }).exec();
+        if (!instructionsDoc) {
+            throw new Error('concierge_instructions key not found in MongoDB config collection.');
+        }
+        let finalContext = instructionsDoc.value + '\n\n';
         finalContext += '[STATIC KNOWLEDGE BASE BOUNDARY START]\n';
 
-        // 2. Load all shared knowledge base records from MongoDB
+        // 2. Load all knowledge base records from MongoDB
         try {
             const knowledgeDocs = await Knowledge.find().sort({ sortOrder: 1 }).exec();
-            
+
             for (const doc of knowledgeDocs) {
                 finalContext += `---\nFILE NAME: ${doc.title}\n---\n${doc.content}\n\n`;
             }
-            logger.info(`Loaded local instructions and ${knowledgeDocs.length} context documents from MongoDB.`);
+            logger.info(`Loaded instructions from MongoDB config and ${knowledgeDocs.length} context documents.`);
         } catch (dbError) {
             logger.error(`Error reading Knowledge from MongoDB: ${dbError.message}`);
         }
@@ -27,7 +28,7 @@ async function buildContext() {
         return finalContext;
 
     } catch (e) {
-        logger.error('Failed to preload primary context files', e);
+        logger.error('Failed to build context from MongoDB', e);
         return 'You are a helpful assistant.'; // Fallback to prevent Mongoose validation error
     }
 }

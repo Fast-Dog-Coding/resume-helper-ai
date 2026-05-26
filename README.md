@@ -41,6 +41,19 @@ The app validates required variables at startup and will exit if any are missing
 
 Optional: `LOG_LEVEL` (default `info`), `LOG_DIR` (default `logs/`), `PORT` (default `3100`), `NODE_ENV`.
 
+## Deployment
+
+This app runs on [Vercel](https://vercel.com) as an Express serverless function. See [DEPLOYMENT.md](DEPLOYMENT.md) for setup, environment variables, smoke tests, and cutover from AWS App Runner.
+
+For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md](HOSTING.md).
+
+### Local development
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Express server on port 3100 |
+| `npm run dev:vercel` | Simulate Vercel serverless locally (requires `vercel login`) |
+
 ## Technologies Used
 - **Frontend:** HTML, CSS, JavaScript, and [marked.js](https://marked.js.org/) for Markdown rendering
 - **Views:** [EJS](https://ejs.co/) templates served by [Express](https://expressjs.com/)
@@ -48,7 +61,7 @@ Optional: `LOG_LEVEL` (default `info`), `LOG_DIR` (default `logs/`), `PORT` (def
 - **Database:** MongoDB via [Mongoose](https://mongoosejs.com/) for threads, knowledge base, config, and logs
 - **LLM:** [OpenRouter API](https://openrouter.ai/) for routing and chat completions
 - **Security:** [Helmet](https://helmetjs.github.io/) (CSP), [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit), AES-256 encrypted session cookies
-- **Logging:** [Winston](https://github.com/winstonjs/winston) with daily rotating files and MongoDB transport
+- **Logging:** [Winston](https://github.com/winstonjs/winston) with daily rotating files (local) or console + MongoDB (Vercel)
 - **API client:** Fetch API for frontend requests to the backend
 
 ## Features
@@ -64,11 +77,10 @@ Optional: `LOG_LEVEL` (default `info`), `LOG_DIR` (default `logs/`), `PORT` (def
 
 See [ROADMAP.md](ROADMAP.md) for the full list. Highlights include:
 - Expanding the knowledge base (courses, dates, content descriptions)
-- Migrating to a new hosting platform before AWS App Runner deprecation (2027)
 - Adding unit tests for core logic
 - Expanded error handling and documentation
 
 ## Feedback
 If you have any feedback or suggestions for improvement, please feel free to reach out to the author, Grant Lindsay, at [grant@fastdogcoding.com](mailto:grant@fastdogcoding.com).
 
-Copyright © 2024–2026 Fast Dog Coding
+Copyright © 2024–2026 Fast Dog Coding, LLC.

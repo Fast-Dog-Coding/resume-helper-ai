@@ -3,7 +3,6 @@ const { constants } = require('node:http2');
 const crypto = require('crypto');
 const createError = require('http-errors');
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -11,22 +10,9 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const logger = require('./config/logger');
 const validateEnvVariables = require('./config/validateEnv');
+const { connectDB } = require('./config/database');
 
 validateEnvVariables();
-
-// Connect to the database using async/await
-(async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_CONNECTION, {
-      dbName: process.env.MONGODB_DB_NAME
-    });
-    logger.info('MongoDB Connected!');
-
-  } catch (error) {
-    logger.error('MongoDB connection error:', error);
-    process.exit(1);
-  }
-})();
 
 // Set rate limiter config
 const limiter = rateLimit({
@@ -47,6 +33,17 @@ app.set('trust proxy', parseInt(process.env.RATE_LIMIT_PROXY, 10));
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+// Reuse cached MongoDB connection across serverless invocations
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    logger.error('MongoDB connection error:', error);
+    next(error);
+  }
+});
 
 // Setup Morgan to use Winston for HTTP logging
 app.use(morgan('combined', { stream: { write: (message) => logger.info(message.trim()) } }));

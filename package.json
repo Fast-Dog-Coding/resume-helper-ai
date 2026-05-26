@@ -2,8 +2,12 @@
   "name": "candidate-concierge",
   "version": "1.2.1",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "start": "node ./bin/www",
+    "dev:vercel": "vercel dev",
     "push-patch": "npm version patch && git push",
     "push-minor": "npm version minor && git push",
     "push-major": "npm version major && git push"
@@ -25,6 +29,7 @@
     "winston-mongodb": "^7.0.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21"
+    "@types/express": "^4.17.21",
+    "vercel": "^47.0.5"
   }
 }

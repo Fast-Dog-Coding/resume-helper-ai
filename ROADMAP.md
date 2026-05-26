@@ -8,7 +8,7 @@ This document outlines planned improvements, technical debt, and new features fo
 ## Platform Migration
 - ~~**Migrate away from OpenAI Assistants API:** The current API is being deprecated. We need to refactor the backend communication to use the generic OpenAI Chat Completions API (Responses API) or migrate to a new LLM provider like Gemini. Another option to evaluate is OpenRouter.~~ (Done — migrated to OpenRouter via Chat Completions API; thread history managed in MongoDB)
 - ~~**Adopt File Search Stores:** For RAG of resume, projects, and other relevant files for the LLM to use to answer questions.~~ (Done — Knowledge Base loaded from MongoDB and injected as static text in the system prompt; implicit caching via OpenRouter)
-- [ ] **Move to New Host:** AWS App Runner, which hosts this app, will be deprecated in 2027. Their suggestion is to migrate to Amazon ECS Express Mode. There may be better choices.
+- [ ] **Move to Vercel:** Code and docs ready ([DEPLOYMENT.md](DEPLOYMENT.md)). Remaining: create Vercel project, configure env vars, pilot deploy, DNS cutover from AWS App Runner, decommission App Runner after soak period. See [HOSTING.md](HOSTING.md) for studio-wide hosting defaults.
 
 ## New Features
 - [ ] **AI Files/Context Expansions:** Add a list of courses taken, dates completed, and content descriptions to better ground the AI's responses about continuous learning and background.

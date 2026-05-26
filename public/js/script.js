@@ -102,15 +102,24 @@
 
   /**
    * Starts showing progress messages at intervals.
+   * Messages are shuffled on each call so every request shows a different sequence.
    *
    * @returns {number} The interval ID.
    */
   function startProgressMessage() {
-    const messages = (window.APP_CONFIG && window.APP_CONFIG.loadingMessages) || [
+    const source = (window.APP_CONFIG && window.APP_CONFIG.loadingMessages) || [
       'I\'m looking...',
       'Still working...',
       'Almost there...'
     ];
+
+    // Fisher-Yates shuffle on a copy so the original order is preserved
+    const messages = source.slice();
+    for (let i = messages.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [messages[i], messages[j]] = [messages[j], messages[i]];
+    }
+
     let index = 0;
     loadingMessage.textContent = messages[index];
     loadingMessage.hidden = false;

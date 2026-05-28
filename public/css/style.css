@@ -359,16 +359,20 @@ button:disabled {
   }
 }
 
-/* Legal / privacy page */
-body.legal-page {
+/* Legal / privacy page — html must scroll (global html { overflow: hidden } is for chat UI) */
+html.legal-page {
   height: auto;
-  min-height: 100vh;
-  min-height: 100dvh;
-  overflow: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body.legal-page {
   display: block;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: visible;
 }
 
 .legal-header .header-content {

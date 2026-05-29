@@ -358,3 +358,122 @@ button:disabled {
     margin-left: 0;
   }
 }
+
+/* Legal / privacy page — html must scroll (global html { overflow: hidden } is for chat UI) */
+html.legal-page {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.legal-page {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: visible;
+}
+
+.legal-header .header-content {
+  max-width: 720px;
+}
+
+.legal-back-link {
+  color: var(--accent-color);
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.legal-back-link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.legal-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  line-height: 1.6;
+}
+
+.legal-updated,
+.legal-notice {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.legal-section {
+  margin-top: 2rem;
+}
+
+.legal-section h2 {
+  font-size: 1.35rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.legal-section h3 {
+  font-size: 1.05rem;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.legal-section p,
+.legal-section li {
+  color: var(--text-secondary);
+}
+
+.legal-section a {
+  color: var(--accent-color);
+}
+
+.legal-section a:hover {
+  color: var(--accent-hover);
+}
+
+.legal-section code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+  background: var(--surface-color-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.legal-section ul {
+  padding-left: 1.25rem;
+}
+
+.legal-section li {
+  margin-bottom: 0.5rem;
+}
+
+.site-footer-legal {
+  text-align: center;
+  padding: 8px 16px 12px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.site-footer-legal a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.site-footer-legal a:hover {
+  text-decoration: underline;
+}
+
+.panel-legal-note {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.panel-legal-note a {
+  color: var(--accent-color);
+}

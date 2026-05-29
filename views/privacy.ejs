@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="legal-page">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description"
+        content="Privacy and terms for Candidate Concierge — how chat data is collected, processed, and retained.">
+    <title>
+        <%= title %>
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="legal-page">
+    <header class="app-header legal-header">
+        <div class="header-content">
+            <div class="header-title">
+                <p>Candidate Concierge</p>
+                <h1>Privacy &amp; Terms</h1>
+            </div>
+            <a href="/" class="legal-back-link">Back to chat</a>
+        </div>
+    </header>
+
+    <main class="legal-main">
+        <p class="legal-updated"><em>Last updated: <%= lastUpdated %></em></p>
+        <p class="legal-notice"><strong>Not legal advice.</strong> This page describes how Candidate Concierge handles
+            information when you use the chat.</p>
+
+        <section class="legal-section" aria-labelledby="summary-heading">
+            <h2 id="summary-heading">At a glance</h2>
+            <ul>
+                <li><strong>Operator:</strong> Fast Dog Coding, LLC (Grant Lindsay).</li>
+                <li><strong>What you send:</strong> Questions and messages you type in the chat (for example, job
+                    requirements you paste for fit questions).</li>
+                <li><strong>What we collect automatically:</strong> An encrypted session cookie and standard server logs
+                    (including IP address for rate limiting).</li>
+                <li><strong>Why:</strong> To run the chat, remember your conversation in this browser, prevent abuse, and
+                    fix errors.</li>
+                <li><strong>Who processes it:</strong> OpenRouter and underlying AI model providers, MongoDB Atlas
+                    (database), Vercel (hosting), and CDNs for fonts and scripts.</li>
+                <li><strong>How long:</strong> Chat history is automatically deleted about <strong>7 days</strong> after
+                    the conversation starts; the session cookie lasts up to <strong>7 days</strong>.</li>
+                <li><strong>Reset:</strong> Clears your browser session and on-screen chat; <strong>a copy on our servers
+                        may remain until the 7-day automatic deletion.</strong></li>
+                <li><strong>Do not share:</strong> Passwords, government IDs, financial data, or other sensitive personal
+                    information.</li>
+                <li><strong>Questions:</strong> <a href="mailto:info@fastdogcoding.com">info@fastdogcoding.com</a></li>
+            </ul>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacy-heading">
+            <h2 id="privacy-heading">Privacy</h2>
+
+            <h3>Who operates this service</h3>
+            <p>Candidate Concierge is operated by <strong>Fast Dog Coding, LLC</strong>. For general website privacy
+                (the Fast Dog Coding marketing site), see <a href="https://fastdogcoding.com/privacy"
+                    rel="noopener noreferrer">fastdogcoding.com/privacy</a>.</p>
+
+            <h3>Information you provide</h3>
+            <p>When you use the chat, you may submit free-text questions and follow-up messages. Recruiters and hiring
+                managers sometimes paste job descriptions or requirements. <strong>All of that text is stored and sent to
+                    third-party AI providers</strong> to generate responses.</p>
+            <p>Please <strong>do not</strong> submit passwords, government identification numbers, payment card or bank
+                details, health information, or other highly sensitive personal data. We are not designed to collect or
+                protect that category of information.</p>
+
+            <h3>Information collected automatically</h3>
+            <ul>
+                <li><strong>Session cookie (<code>threadId</code>):</strong> A random conversation identifier, stored in
+                    an encrypted, <code>httpOnly</code> cookie (up to 7 days; <code>SameSite=Strict</code>; secure in
+                    production) so your messages can be tied to one thread.</li>
+                <li><strong>Server logs:</strong> HTTP requests are logged (for example via our application logger). On
+                    production hosting, logs may appear in the platform console. Locally, logs may be written to rotating
+                    files. Warnings and errors may also be stored in our database logging collection.</li>
+                <li><strong>Rate limiting:</strong> We use your IP address (and standard rate-limit headers) to cap how
+                    many API requests can be made in a time window.</li>
+                <li><strong>No accounts:</strong> This app does not offer sign-in and does not ask for your email or
+                    password.</li>
+            </ul>
+
+            <h3>How we use information</h3>
+            <ul>
+                <li>Provide and improve the chat experience</li>
+                <li>Persist conversation history for your session</li>
+                <li>Enforce usage limits and protect the service</li>
+                <li>Diagnose errors and abuse</li>
+            </ul>
+            <p>We do <strong>not</strong> sell your chat content.</p>
+
+            <h3>Third-party service providers</h3>
+            <p>User messages (and the system context needed to answer about Grant’s professional background) are
+                processed by:</p>
+            <ul>
+                <li><a href="https://openrouter.ai/privacy" rel="noopener noreferrer">OpenRouter</a> — routes requests to
+                    configured AI models</li>
+                <li>Model providers (e.g. Google, OpenAI via OpenRouter) — generate AI responses from your prompts</li>
+                <li><a href="https://www.mongodb.com/legal/privacy-policy" rel="noopener noreferrer">MongoDB Atlas</a> —
+                    stores conversation threads</li>
+                <li><a href="https://vercel.com/legal/privacy-policy" rel="noopener noreferrer">Vercel</a> — hosts the
+                    application</li>
+                <li>Google Fonts, jsDelivr — deliver fonts and the Markdown renderer script</li>
+            </ul>
+            <p>Each provider has its own privacy practices. Content you submit may be processed in the United States or
+                other regions where these providers operate.</p>
+
+            <h3>Retention</h3>
+            <ul>
+                <li><strong>Chat threads:</strong> Stored in MongoDB with an automatic expiration of approximately
+                    <strong>7 days</strong> from when the conversation was first created.</li>
+                <li><strong>Session cookie:</strong> Up to <strong>7 days</strong> from when it is set, unless you clear
+                    it sooner.</li>
+                <li><strong>Server logs:</strong> Retained as long as reasonably necessary for operations, security, and
+                    troubleshooting (subject to our hosting and database providers’ practices).</li>
+            </ul>
+
+            <h3>Reset and ending your session</h3>
+            <p>The <strong>Reset</strong> control clears the session cookie and removes messages from your browser view.
+                <strong>It does not guarantee immediate deletion of the conversation on our servers</strong>; server-side
+                copies may remain until the automatic 7-day expiration described above.</p>
+            <p>You can also stop using the service at any time.</p>
+
+            <h3>AI-generated responses</h3>
+            <p>This application uses large language models. Responses can be incomplete or incorrect. <strong>Verify
+                    important details directly with Grant</strong> before making hiring or business decisions.</p>
+
+            <h3>Your choices and contact</h3>
+            <ul>
+                <li>Stop using the chat at any time.</li>
+                <li>Use <strong>Reset</strong> to end the current browser session (with the server retention caveat
+                    above).</li>
+                <li>Email <a href="mailto:info@fastdogcoding.com">info@fastdogcoding.com</a> with privacy questions or
+                    requests. We will respond when practicable; this is a small portfolio tool without a formal data-request
+                    portal.</li>
+            </ul>
+
+            <h3>Changes to this notice</h3>
+            <p>We may update this page from time to time. The “Last updated” date at the top will change when we do.
+                Continued use of the chat after changes constitutes acceptance of the updated notice.</p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="terms-heading">
+            <h2 id="terms-heading">Terms of use</h2>
+
+            <h3>Permitted use</h3>
+            <p>You may use Candidate Concierge to learn about Grant Lindsay’s professional background, skills, and
+                experience—for example, as a recruiter, hiring manager, or colleague exploring fit for a role.</p>
+
+            <h3>Prohibited use</h3>
+            <p>You may not:</p>
+            <ul>
+                <li>Abuse, harass, or submit illegal content</li>
+                <li>Attempt to bypass rate limits or disrupt the service</li>
+                <li>Use automated tools to scrape or flood the API</li>
+                <li>Try to extract system instructions, hidden prompts, or non-public data through prompt injection or
+                    similar techniques</li>
+            </ul>
+
+            <h3>No professional advice</h3>
+            <p>Responses are <strong>informational only</strong> and are not legal, HR, employment, or professional
+                advice.</p>
+
+            <h3>Disclaimer</h3>
+            <p>THE SERVICE IS PROVIDED <strong>“AS IS”</strong> WITHOUT WARRANTIES OF ANY KIND. TO THE FULLEST EXTENT
+                PERMITTED BY LAW, FAST DOG CODING, LLC DISCLAIMS LIABILITY FOR DAMAGES ARISING FROM YOUR USE OF THE CHAT OR
+                RELIANCE ON AI-GENERATED CONTENT.</p>
+
+            <h3>Moderation</h3>
+            <p>We may rate-limit, block, or refuse requests that violate these terms or provider policies. Some requests
+                may be rejected by upstream AI moderation.</p>
+
+            <h3>Governing law</h3>
+            <p>These terms are governed by the laws of the State in which Fast Dog Coding, LLC is organized, without
+                regard to conflict-of-law rules, except where prohibited.</p>
+        </section>
+    </main>
+</body>
+
+</html>

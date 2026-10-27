@@ -8,11 +8,14 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev:vercel": "vercel dev",
+    "sync:db": "node ./scripts/sync-concierge-db.js",
+    "test": "node --test test/*.test.js",
     "push-patch": "npm version patch && git push",
     "push-minor": "npm version minor && git push",
     "push-major": "npm version major && git push"
   },
   "dependencies": {
+    "@fastdogcoding/resume-master": "file:./packages/resume-master",
     "cookie-parser": "~1.4.4",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",

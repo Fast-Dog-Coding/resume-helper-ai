@@ -34,12 +34,22 @@ The app validates required variables at startup and will exit if any are missing
 | `OPENROUTER_MODELS` | JSON array of model IDs (e.g. `["google/gemini-2.5-flash","openai/gpt-4.1-mini"]`) |
 | `MONGODB_CONNECTION` | MongoDB connection string |
 | `MONGODB_DB_NAME` | MongoDB database name |
+| `RESUME_API_KEY` | Bearer token for the resume-master projection (`concierge` client policy) |
 | `COOKIE_ENCRYPTION_KEY` | 32-byte hex string for encrypting thread cookies |
 | `RATE_LIMIT_WINDOW_MS` | Rate limit window in milliseconds |
 | `RATE_LIMIT_AMOUNT` | Max requests per window per IP |
 | `RATE_LIMIT_PROXY` | Number of proxies between user and server |
 
 Optional: `LOG_LEVEL` (default `info`), `LOG_DIR` (default `logs/`), `PORT` (default `3100`), `NODE_ENV`.
+
+Optional resume-projection overrides:
+
+| Variable | Purpose |
+|----------|---------|
+| `RESUME_SERVICE_URL` | Projection service origin. Defaults to `https://resume-master-nu.vercel.app` |
+| `RESUME_CACHE_TTL_MS` | In-memory TTL for the projected resume on a warm instance. Defaults to `900000` (15 minutes) |
+
+The Node client is vendored at `packages/resume-master` (`@fastdogcoding/resume-master`) so Vercel can install it without a private npm registry. After editing `config/instructions.md`, run `npm run sync:db` to upsert `concierge_instructions`, delete legacy Knowledge documents other than the STAR file, and clear cached chat threads.
 
 ## Deployment
 
@@ -53,12 +63,15 @@ For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md
 |---------|-------------|
 | `npm start` | Express server on port 3100 |
 | `npm run dev:vercel` | Simulate Vercel serverless locally (requires `vercel login`) |
+| `npm test` | Unit tests for the projection client, context builder, and chat input validation |
+| `npm run sync:db` | Upsert instructions and drop legacy knowledge documents |
 
 ## Technologies Used
 - **Frontend:** HTML, CSS, JavaScript, and [marked.js](https://marked.js.org/) for Markdown rendering
 - **Views:** [EJS](https://ejs.co/) templates served by [Express](https://expressjs.com/)
 - **Backend:** Node.js with Express
-- **Database:** MongoDB via [Mongoose](https://mongoosejs.com/) for threads, knowledge base, config, and logs
+- **Database:** MongoDB via [Mongoose](https://mongoosejs.com/) for threads, the STAR knowledge document, config, and logs
+- **Resume data:** [@fastdogcoding/resume-master](packages/resume-master) projection client (vendored)
 - **LLM:** [OpenRouter API](https://openrouter.ai/) for routing and chat completions
 - **Security:** [Helmet](https://helmetjs.github.io/) (CSP), [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit), AES-256 encrypted session cookies
 - **Logging:** [Winston](https://github.com/winstonjs/winston) with daily rotating files (local) or console + MongoDB (Vercel)
@@ -66,7 +79,7 @@ For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md
 
 ## Features
 - Chat interface with conversation history persisted per browser session
-- Knowledge base loaded from MongoDB and injected into the system prompt
+- Resume projection (JSON) and the STAR interview document injected into the system prompt
 - Markdown-formatted assistant responses
 - Shift+Enter for new lines, Enter to send
 - Rotating "dad joke" progress messages while the assistant is thinking

@@ -12,6 +12,7 @@ function validateEnvVariables() {
     'APP_TITLE',
     'MONGODB_CONNECTION',
     'MONGODB_DB_NAME',
+    'RESUME_API_KEY',
     'COOKIE_ENCRYPTION_KEY',
     'OPENROUTER_API_KEY',
     'OPENROUTER_BASE_URL',

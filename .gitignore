@@ -79,6 +79,8 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env*
+!.env.sample
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -212,7 +214,10 @@ fabric.properties
 .DS_Store
 tmp/
 
-# Project-specific: sensitive AI config & knowledge files
-# Instructions live in MongoDB (config collection); data/ migrated to MongoDB (knowledge collection)
-config/instructions.md
+# Project-specific: legacy private knowledge markdown.
+# System instructions are versioned in config/instructions.md.
+# Resume facts are projected by resume-master; do not commit data/.
 data/
+
+# Vercel CLI local project metadata
+.vercel

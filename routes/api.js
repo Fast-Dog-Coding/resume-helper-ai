@@ -19,7 +19,16 @@ api.post(
   setThreadId,
   async (req, res, next) => {
     try {
-      const { content } = req.body;
+      const content = req.body ? req.body.content : undefined;
+
+      if (typeof content !== 'string' || content.trim().length === 0) {
+        return res.status(400).json({ error: 'Message content is required.' });
+      }
+
+      if (content.length > 8000) {
+        return res.status(400).json({ error: 'Message exceeds maximum length of 8000 characters.' });
+      }
+
       const threadId = req.threadId;
 
       // 1. Process the entire chat flow in one line

@@ -52,6 +52,9 @@ In Vercel → Project → **Settings → Environment Variables**, add every requ
 | `OPENROUTER_MODELS` | JSON array, e.g. `["google/gemini-2.5-flash","openai/gpt-4.1-mini"]` |
 | `MONGODB_CONNECTION` | Atlas connection string |
 | `MONGODB_DB_NAME` | Database name |
+| `RESUME_API_KEY` | Required. Bearer token for the resume-master `concierge` projection |
+| `RESUME_SERVICE_URL` | Optional. Defaults to `https://resume-master-nu.vercel.app` |
+| `RESUME_CACHE_TTL_MS` | Optional. In-memory projection cache TTL in milliseconds. Defaults to `900000` (15 minutes) |
 | `COOKIE_ENCRYPTION_KEY` | 32-byte hex string (generate once; keep stable across deploys) |
 | `RATE_LIMIT_WINDOW_MS` | `300000` |
 | `RATE_LIMIT_AMOUNT` | `20` |
@@ -60,6 +63,18 @@ In Vercel → Project → **Settings → Environment Variables**, add every requ
 | `LOG_LEVEL` | `info` (optional) |
 
 Vercel sets `VERCEL=1` automatically — the app uses this to skip file-based logging.
+
+### Resume projection and prompt sync
+
+Professional resume facts are loaded at runtime from the resume-master projection service. The client is vendored at `packages/resume-master` because `@fastdogcoding/resume-master` is private and is not published to npm; `package.json` depends on it with `file:./packages/resume-master`. `RESUME_SERVICE_URL` defaults to `https://resume-master-nu.vercel.app`. Warm instances reuse the projection for `RESUME_CACHE_TTL_MS` (default 15 minutes). Only `07_AI_Asst_STAR-Formatted_Responses.md` stays in the MongoDB Knowledge collection.
+
+System instructions are versioned in [`config/instructions.md`](config/instructions.md). After that file changes, upsert it and remove legacy knowledge documents:
+
+```bash
+npm run sync:db
+```
+
+The sync upserts `{ key: 'concierge_instructions' }`, deletes Knowledge documents whose title is not the STAR file, strips any leftover `(as mentioned in the resume)` phrasing from the STAR document, and clears the Thread collection so previous system prompts do not linger for 7 days. Pass `--clear-threads` to request that thread cleanup explicitly. Pass `--keep-threads` to leave existing threads in place.
 
 ### Node.js version
 

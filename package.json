@@ -33,6 +33,6 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "vercel": "^47.0.5"
+    "vercel": "^65.4.0"
   }
 }

@@ -79,6 +79,8 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env*
+!.env.sample
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -216,3 +218,6 @@ tmp/
 # System instructions are versioned in config/instructions.md.
 # Resume facts are projected by resume-master; do not commit data/.
 data/
+
+# Vercel CLI local project metadata
+.vercel

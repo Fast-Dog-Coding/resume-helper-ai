@@ -1,18 +1,21 @@
 {
   "name": "@fastdogcoding/resume-master",
-  "version": "1.2.0",
-  "description": "Client bridge for @fastdogcoding/resume-master projection service.",
+  "version": "2.0.0",
+  "type": "module",
   "main": "./index.cjs",
+  "module": "./index.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "require": "./index.cjs",
-      "default": "./index.cjs"
+      "import": "./index.js",
+      "require": "./index.cjs"
     }
   },
-  "engines": {
-    "node": ">=22"
-  },
-  "license": "UNLICENSED"
+  "vendorStamp": {
+    "clientId": "concierge",
+    "version": "2.0.0",
+    "commit": "0ae59e5ee5a93c329762e8354ca57dd7ec8e41e7",
+    "generatedAt": "2026-11-04T22:17:37.070Z"
+  }
 }

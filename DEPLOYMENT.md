@@ -11,7 +11,7 @@ For Fast Dog Coding’s broader hosting strategy, see [HOSTING.md](HOSTING.md).
 - [OpenRouter](https://openrouter.ai/) API key
 - [MongoDB Atlas](https://www.mongodb.com/atlas) cluster (Network Access must allow Vercel — use `0.0.0.0/0` or Atlas’s Vercel integration)
 - **Pro plan ($20/mo)** recommended for production chat (300s max function duration vs Hobby’s 60s max)
-- **Node.js 24.x** (Active LTS) — pinned in [`package.json`](package.json) `engines`; matches Vercel’s default runtime
+- **Node.js 26.x** (Active LTS) — pinned in [`package.json`](package.json) `engines`. Vercel supports 26.x for builds and Functions and uses it as the default for new projects. `engines.node` overrides the version in Project Settings.
 
 ## 1. Create the Vercel project
 
@@ -78,9 +78,9 @@ The sync upserts `{ key: 'concierge_instructions' }`, deletes Knowledge document
 
 ### Node.js version
 
-This project targets **Node.js 24.x** (Active LTS) via `engines` in [`package.json`](package.json). Vercel uses this on deploy; you can also confirm under **Settings → Build and Deployment → Node.js Version** (select **24.x**).
+This project targets **Node.js 26.x** (Active LTS) via `engines` in [`package.json`](package.json). That field overrides the version selected under **Settings → Build and Deployment → Node.js Version**. Set the dashboard to **26.x** as well so project settings match the pin.
 
-For local development, use Node 24 (e.g. `nvm install 24 && nvm use 24`), then run `node -v` before `npm start` or `npm run dev:vercel`.
+For local development, use Node 26 (e.g. `nvm install 26 && nvm use 26`), then run `node -v` before `npm start` or `npm run dev:vercel`.
 
 ### Function timeout
 

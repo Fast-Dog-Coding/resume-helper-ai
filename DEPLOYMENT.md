@@ -49,7 +49,7 @@ In Vercel → Project → **Settings → Environment Variables**, add every requ
 | `APP_HTTP_REFERER` | Production URL, e.g. `https://candidate-concierge.fastdogcoding.com` |
 | `OPENROUTER_API_KEY` | From OpenRouter dashboard |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` |
-| `OPENROUTER_MODELS` | JSON array, e.g. `["google/gemini-2.5-flash","openai/gpt-4.1-mini"]` |
+| `OPENROUTER_MODELS` | JSON array. Defaults to `["google/gemini-3.5-flash-lite"]` when unset. Example: `["google/gemini-3.5-flash-lite","openai/gpt-4.1-mini"]` |
 | `MONGODB_CONNECTION` | Atlas connection string |
 | `MONGODB_DB_NAME` | Database name |
 | `RESUME_API_KEY` | Required. Bearer token for the resume-master `concierge` projection |

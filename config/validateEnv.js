@@ -1,4 +1,5 @@
 const logger = require('./logger');
+const { parseOpenRouterModels } = require('./openRouterModels');
 
 /**
  * Validates that all required environment variables are set.
@@ -16,7 +17,6 @@ function validateEnvVariables() {
     'COOKIE_ENCRYPTION_KEY',
     'OPENROUTER_API_KEY',
     'OPENROUTER_BASE_URL',
-    'OPENROUTER_MODELS',
     'RATE_LIMIT_AMOUNT',
     'RATE_LIMIT_WINDOW_MS',
     'RATE_LIMIT_PROXY'
@@ -25,6 +25,13 @@ function validateEnvVariables() {
 
   if (missingEnvVars.length > 0) {
     logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+    process.exit(1);
+  }
+
+  try {
+    parseOpenRouterModels();
+  } catch (error) {
+    logger.error(error.message);
     process.exit(1);
   }
 }

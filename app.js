@@ -91,6 +91,17 @@ app.use((err, req, res, next) => {
 
   const status = err.status || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
   if (req.originalUrl.startsWith('/api')) {
+    // 4xx text is part of the client contract (bad JSON, 404, moderation).
+    // 5xx and errors with no status can carry a slice of an upstream body
+    // inside err.message, so the response stays generic and the detail is logged.
+    if (status >= constants.HTTP_STATUS_INTERNAL_SERVER_ERROR) {
+      console.error(err.message);
+      if (err.stack) {
+        console.error(err.stack);
+      }
+      return res.status(status).json({ error: 'Internal server error' });
+    }
+
     return res.status(status).json({ error: err.message });
   }
 

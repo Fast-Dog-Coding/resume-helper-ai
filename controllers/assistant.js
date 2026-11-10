@@ -2,8 +2,9 @@ const OpenAI = require('openai');
 const logger = require('../config/logger');
 const Thread = require('../models/Thread');
 const { buildContext } = require('../config/context');
+const { parseOpenRouterModels } = require('../config/openRouterModels');
 
-const models = JSON.parse(process.env.OPENROUTER_MODELS || '[google/gemini-1.5-pro]');
+const models = parseOpenRouterModels();
 
 const openai = new OpenAI({
   baseURL: process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1",
@@ -14,10 +15,19 @@ const openai = new OpenAI({
   }
 });
 
-async function processChat(threadId, newContent) {
+/**
+ * @param {string} threadId
+ * @param {string} newContent
+ * @param {{ ThreadModel?: { findOne: Function }, client?: { chat: { completions: { create: Function } } } }} [deps]
+ *        Optional stand-ins for the thread model and completion client.
+ */
+async function processChat(threadId, newContent, deps = {}) {
+  const ThreadModel = deps.ThreadModel || Thread;
+  const client = deps.client || openai;
+
   try {
     // 1. Fetch from Mongo or Create new Thread
-    let thread = await Thread.findOne({ threadId });
+    let thread = await ThreadModel.findOne({ threadId });
     if (!thread) {
       const resumeContext = await buildContext();
       thread = new Thread({
@@ -30,7 +40,7 @@ async function processChat(threadId, newContent) {
     thread.messages.push({ role: 'user', content: newContent });
 
     // 3. Fire stateless Completion to OpenRouter (with Cached System Prompt)
-    const completion = await openai.chat.completions.create({
+    const completion = await client.chat.completions.create({
       model: models[0],
       models: models,
       messages: thread.messages.map(m => ({ role: m.role, content: m.content }))

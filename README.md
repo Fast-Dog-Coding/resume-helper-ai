@@ -31,7 +31,7 @@ The app validates required variables at startup and will exit if any are missing
 | `APP_HTTP_REFERER` | HTTP referer sent to OpenRouter |
 | `OPENROUTER_API_KEY` | OpenRouter API key |
 | `OPENROUTER_BASE_URL` | OpenRouter API base URL |
-| `OPENROUTER_MODELS` | JSON array of model IDs (e.g. `["google/gemini-2.5-flash","openai/gpt-4.1-mini"]`) |
+| `OPENROUTER_MODELS` | JSON array of model IDs. Defaults to `["google/gemini-3.5-flash-lite"]` when unset (e.g. `["google/gemini-3.5-flash-lite","openai/gpt-4.1-mini"]`). An invalid value stops startup. |
 | `MONGODB_CONNECTION` | MongoDB connection string |
 | `MONGODB_DB_NAME` | MongoDB database name |
 | `RESUME_API_KEY` | Bearer token for the resume-master projection (`concierge` client policy) |
@@ -63,7 +63,7 @@ For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md
 |---------|-------------|
 | `npm start` | Express server on port 3100 |
 | `npm run dev:vercel` | Simulate Vercel serverless locally (requires `vercel login`) |
-| `npm test` | Unit tests for the projection client, context builder, and chat input validation |
+| `npm test` | Unit tests for the projection client, context builder, chat input validation, and OpenRouter model configuration |
 | `npm run sync:db` | Upsert instructions and drop legacy knowledge documents |
 
 ## Technologies Used

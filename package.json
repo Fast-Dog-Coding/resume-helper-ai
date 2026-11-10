@@ -1,9 +1,9 @@
 {
   "name": "candidate-concierge",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "engines": {
-    "node": "24.x"
+    "node": "26.x"
   },
   "scripts": {
     "start": "node ./bin/www",

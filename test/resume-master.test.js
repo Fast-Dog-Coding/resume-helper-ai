@@ -1,10 +1,10 @@
 const { afterEach, describe, test } = require('node:test');
 const assert = require('node:assert/strict');
 
-const {
-  DEFAULT_RESUME_SERVICE_URL,
-  getResume
-} = require('@fastdogcoding/resume-master');
+const { getResume } = require('@fastdogcoding/resume-master');
+
+/** Production origin used when baseUrl and RESUME_SERVICE_URL are both empty. */
+const PRODUCTION_RESUME_SERVICE_URL = 'https://resume-master-nu.vercel.app';
 
 const API_KEY = 'nw_test_key_alex_morgan';
 
@@ -47,15 +47,14 @@ describe('getResume', { concurrency: false }, () => {
     assert.equal(error.cause, undefined);
   }
 
-  test('uses DEFAULT_RESUME_SERVICE_URL when baseUrl and RESUME_SERVICE_URL are unset', async () => {
+  test('uses the production service URL when baseUrl and RESUME_SERVICE_URL are unset', async () => {
     delete process.env.RESUME_SERVICE_URL;
     const { calls } = installFetch({ body: { basics: { name: 'Alex Morgan' } } });
 
     const result = await getResume(API_KEY);
 
-    assert.equal(DEFAULT_RESUME_SERVICE_URL, 'https://resume-master-nu.vercel.app');
     assert.equal(calls.length, 1);
-    assert.equal(calls[0].url, `${DEFAULT_RESUME_SERVICE_URL}/v1/resume`);
+    assert.equal(calls[0].url, `${PRODUCTION_RESUME_SERVICE_URL}/v1/resume`);
     assert.equal(calls[0].init.method, 'POST');
     assert.equal(calls[0].init.headers.Authorization, `Bearer ${API_KEY}`);
     assert.equal(calls[0].init.headers.Accept, 'application/json');

@@ -34,6 +34,15 @@ app.set('trust proxy', parseInt(process.env.RATE_LIMIT_PROXY, 10));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Classify API requests the way this app routes them. Express matches the
+// `/api` mount with the app's own case and strict-routing settings, so `/API`
+// and `/Api` are included and `/apiv2` is not. This sits ahead of middleware
+// that can fail (database, JSON parsing) so those errors are classified too.
+app.use('/api', function markApiRoute(req, res, next) {
+  req.routedToApi = true;
+  next();
+});
+
 // Reuse cached MongoDB connection across serverless invocations
 app.use(async (req, res, next) => {
   try {
@@ -85,16 +94,29 @@ app.use((req, res, next) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  // Set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'production' ? {} : err;
-
   const status = err.status || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
-  if (req.originalUrl.startsWith('/api')) {
-    return res.status(status).json({ error: err.message });
+  const serverError = status >= constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
+  // 4xx text is part of the client contract (bad JSON, 404, moderation).
+  // 5xx and errors with no status can carry a slice of an upstream body.
+  const publicMessage = serverError ? 'Internal server error' : err.message;
+
+  if (serverError) {
+    console.error(err.message);
+    if (err.stack) {
+      console.error(err.stack);
+    }
   }
 
-  // Render the error page
+  // Stack traces are a development aid. Other environments get the status only.
+  const showErrorStack = req.app.get('env') === 'development';
+  res.locals.message = publicMessage;
+  res.locals.showErrorStack = showErrorStack;
+  res.locals.error = showErrorStack ? err : { status };
+
+  if (req.routedToApi) {
+    return res.status(status).json({ error: publicMessage });
+  }
+
   res.status(status);
   res.render('error');
 });

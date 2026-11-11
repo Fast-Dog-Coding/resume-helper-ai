@@ -158,9 +158,13 @@ describe('API error handler', { concurrency: false }, () => {
       assert.match(response.headers['content-type'], /^application\/json/);
       assert.deepEqual(response.json, { error: GENERIC_ERROR });
       assertNoUpstreamFragment(response.raw);
-      assert.match(logged, /Unexpected token '<'/);
-      assert.match(logged, /<html>UPST/);
-      assert.match(logged, /not valid JSON/);
+      assert.match(logged, /getResume request failed/);
+      assert.equal(logged.includes('Unexpected token'), false);
+      assert.equal(logged.includes('<html>'), false);
+      assert.equal(logged.includes('UPSTREAM'), false);
+      assert.equal(logged.includes('UPST'), false);
+      assert.equal(logged.includes('not valid JSON'), false);
+      assert.equal(logged.includes('SyntaxError'), false);
     } finally {
       errorLog.mock.restore();
     }
@@ -189,9 +193,13 @@ describe('API error handler', { concurrency: false }, () => {
         'https://resume.example.test/v1/resume'
       ]);
       const logged = loggedText(errorLog);
-      assert.match(logged, /Unexpected token '<'/);
-      assert.match(logged, /<html>UPST/);
-      assert.match(logged, /not valid JSON/);
+      assert.match(logged, /getResume request failed/);
+      assert.equal(logged.includes('Unexpected token'), false);
+      assert.equal(logged.includes('<html>'), false);
+      assert.equal(logged.includes('UPSTREAM'), false);
+      assert.equal(logged.includes('UPST'), false);
+      assert.equal(logged.includes('not valid JSON'), false);
+      assert.equal(logged.includes('SyntaxError'), false);
     } finally {
       errorLog.mock.restore();
     }

@@ -206,7 +206,10 @@ export interface GetResumeOptions {
  * Reads nothing from disk, does not take a resume document, and does not
  * carry allow lists. A non-empty `baseUrl` selects the service. Otherwise a
  * non-empty `RESUME_SERVICE_URL` does. Otherwise the request goes to
- * https://resume-master-nu.vercel.app. Errors never include the API key.
+ * https://resume-master-nu.vercel.app. Errors never include the API key
+ * or the response body. Transport failures and bodies that are not JSON
+ * throw "getResume request failed" with no cause. A non-OK status throws
+ * "getResume failed with HTTP <status>" and does not read the body.
  */
 export declare function getResume(
   apiKey: string,

@@ -32,7 +32,10 @@ function requestBody(options) {
  * Reads nothing from disk, does not take a resume document, and does not
  * carry allow lists. A non-empty `baseUrl` selects the service. Otherwise a
  * non-empty `RESUME_SERVICE_URL` does. Otherwise the request goes to
- * https://resume-master-nu.vercel.app. Errors never include the API key.
+ * https://resume-master-nu.vercel.app. Errors never include the API key
+ * or the response body. Transport failures and bodies that are not JSON
+ * throw "getResume request failed" with no cause. A non-OK status throws
+ * "getResume failed with HTTP <status>" and does not read the body.
  */
 async function getResume(apiKey, options = {}, baseUrl) {
     if (typeof apiKey !== "string" || apiKey.length === 0) {
@@ -58,5 +61,10 @@ async function getResume(apiKey, options = {}, baseUrl) {
     if (!response.ok) {
         throw new Error(`getResume failed with HTTP ${response.status}`);
     }
-    return (await response.json());
+    try {
+        return (await response.json());
+    }
+    catch {
+        throw new Error("getResume request failed");
+    }
 }

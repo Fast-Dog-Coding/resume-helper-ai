@@ -157,4 +157,19 @@ describe('getResume', { concurrency: false }, () => {
       return true;
     });
   });
+
+  test('replaces a non-JSON success body with getResume request failed and no cause', async () => {
+    installFetch({
+      status: 200,
+      body: `<html>super-secret-body ${API_KEY} internal-debug is not valid JSON`
+    });
+
+    await assert.rejects(() => getResume(API_KEY), (error) => {
+      assert.equal(error.message, 'getResume request failed');
+      assert.equal(error.message.includes('Unexpected token'), false);
+      assert.equal(error.message.includes('not valid JSON'), false);
+      assertKeyAndBodyScrubbed(error);
+      return true;
+    });
+  });
 });

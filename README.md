@@ -62,7 +62,7 @@ For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md
 | Command | Description |
 |---------|-------------|
 | `npm start` | Express server on port 3100 |
-| `npm run dev:vercel` | Simulate Vercel serverless locally (requires `vercel login`) |
+| `npm run dev:vercel` | Simulate Vercel serverless locally (`npx vercel dev`; run `npx vercel login` once) |
 | `npm test` | Unit tests for the projection client, context builder, chat input validation, and OpenRouter model configuration |
 | `npm run sync:db` | Upsert instructions and drop legacy knowledge documents |
 

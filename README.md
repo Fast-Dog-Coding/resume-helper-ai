@@ -63,7 +63,7 @@ For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md
 |---------|-------------|
 | `npm start` | Express server on port 3100 |
 | `npm run dev:vercel` | Simulate Vercel serverless locally (`npx vercel dev`; run `npx vercel login` once) |
-| `npm test` | Unit tests for the projection client, context builder, chat input validation, and OpenRouter model configuration |
+| `npm test` | Unit tests for the projection client, context builder, chat input validation, OpenRouter model configuration, and the OpenAI SDK 7 chat path (mocked HTTP, no API key) |
 | `npm run sync:db` | Upsert instructions and drop legacy knowledge documents |
 
 ## Technologies Used
@@ -72,7 +72,7 @@ For Fast Dog Coding’s default hosting choices across projects, see [HOSTING.md
 - **Backend:** Node.js with Express
 - **Database:** MongoDB via [Mongoose](https://mongoosejs.com/) for threads, the STAR knowledge document, config, and logs
 - **Resume data:** [@fastdogcoding/resume-master](packages/resume-master) projection client (vendored)
-- **LLM:** [OpenRouter API](https://openrouter.ai/) for routing and chat completions
+- **LLM:** [OpenRouter API](https://openrouter.ai/) chat completions via the [`openai`](https://github.com/openai/openai-node) 7.x SDK (`chat.completions`, non-streaming). The browser still receives `{ messages: [{ role, content }] }`
 - **Security:** [Helmet](https://helmetjs.github.io/) (CSP), [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit), AES-256 encrypted session cookies
 - **Logging:** [Winston](https://github.com/winstonjs/winston) with daily rotating files (local) or console + MongoDB (Vercel)
 - **API client:** Fetch API for frontend requests to the backend

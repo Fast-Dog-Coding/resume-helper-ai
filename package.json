@@ -26,7 +26,7 @@
     "mongodb": "^6.6.0",
     "mongoose": "^8.3.3",
     "morgan": "^1.10.1",
-    "openai": "^4.40.2",
+    "openai": "^7.57.0",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^5.0.0",
     "winston-mongodb": "^7.0.1"
